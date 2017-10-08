@@ -1,0 +1,101 @@
+{
+  "pidSettings": [
+    {
+      "_Tref": 0,
+      "_Pmax": 4000,
+      "_Kp": 25,
+      "_Ki": 1000,
+      "_Kd": 9,
+      "_P": null,
+      "_I": null,
+      "_D": null,
+      "_MaxP": 1000,
+      "_MaxI": 1000,
+      "_MaxD": 1000,
+      "_MaxU": 1000,
+      "_e": null,
+      "_i": 0,
+      "_U": null
+    },
+    {
+      "_Tref": 0,
+      "_Pmax": 4000,
+      "_Kp": 25,
+      "_Ki": 1000,
+      "_Kd": 9,
+      "_P": null,
+      "_I": null,
+      "_D": null,
+      "_MaxP": 1000,
+      "_MaxI": 1000,
+      "_MaxD": 1000,
+      "_MaxU": 1000,
+      "_e": null,
+      "_i": 0,
+      "_U": null
+    },
+    {
+      "_Tref": 0,
+      "_Pmax": 4000,
+      "_Kp": 25,
+      "_Ki": 1000,
+      "_Kd": 9,
+      "_P": null,
+      "_I": null,
+      "_D": null,
+      "_MaxP": 1000,
+      "_MaxI": 1000,
+      "_MaxD": 1000,
+      "_MaxU": 1000,
+      "_e": null,
+      "_i": 0,
+      "_U": null
+    }
+  ],
+  "equipSettings": [
+    {
+      "equipID": 0,
+      "temp": 0,
+      "units": "F"
+    },
+    {
+      "equipID": 1,
+      "temp": 0,
+      "units": "F"
+    },
+    {
+      "equipID": "2",
+      "temp": 0,
+      "units": "F"
+    }
+  ],
+  "paused": false,
+  "brewingActive": false,
+  "resumeBrewing": false,
+  "timeStamp": "2017-08-07T04:57:28.636Z",
+  "targetTempReached": false,
+  "step": {},
+  "previousTime": 0,
+  "countDownTime": 0,
+  "targetEquip": "0",
+  "countDownRemaining": -151,
+  "chart0heater": "3",
+  "chart0sensor": "3",
+  "chart0watts": "5500",
+  "chart1heater": "2",
+  "chart1sensor": "2",
+  "chart1watts": "165",
+  "chart1p": "25",
+  "chart1i": "1000",
+  "chart1d": "8",
+  "chart2heater": "1",
+  "chart2sensor": "1",
+  "chart2watts": "4500",
+  "chart2p": "25",
+  "chart2i": "1100",
+  "chart2d": "8",
+  "chart0i": "1000",
+  "chart0d": "9",
+  "chart0p": "25",
+  "recipe": "Citrusinesis Clone"
+}

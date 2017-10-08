@@ -1,0 +1,36 @@
+{
+  "name": "brew_controller_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cohbra11/brewcontroller.git"
+  },
+  "keywords": [
+    "resin.io",
+    "webserver",
+    "nodejs",
+    "expressjs"
+  ],
+  "author": "Brian Thornton <gh_cohbra11@resin.io>",
+  "bugs": {
+    "url": "https://github.com/Cohbra11/brewcontroller/issues"
+  },
+  "homepage": "https://github.com/Cohbra11/brewcontroller#readme",
+  "dependencies": {
+    "async": "0.2.10",
+    "express": "^3.2.6",
+    "formidable": "^1.1.1",
+    "jquery": "3.1.1",
+    "jquery-ui": "1.11.4",
+    "mysql": "2.12.0",
+    "pug": "2.0.0-beta6",
+    "socket.io": "0.9.17",
+    "xml2js": "0.4.17"
+  }
+}

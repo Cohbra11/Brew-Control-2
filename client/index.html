@@ -1,0 +1,3410 @@
+
+<!DOCTYPE html>
+<html lang="en" ng-app>
+<head>
+	<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script language="javascript" type="text/javascript" src="js/jquery.min.js"></script>
+	<script language="javascript" type="text/javascript" src="lib/p5js/p5.js"></script>
+	<script language="javascript" type="text/javascript" src="lib/p5js/p5.dom.js"></script>
+	<script language="javascript" type="text/javascript" src="lib/p5js/p5.sound.js"></script>
+	<script language="javascript" type="text/javascript" src="js/async.js"></script>
+
+	<link rel="shortcut icon" href="icons/favicon.ico" />
+	<link rel="apple-touch-icon" sizes="57x57" href="icons/beer-57-270546.png" />
+	<link rel="apple-touch-icon" sizes="72x72" href="icons/beer-72-270546.png" />
+	<link rel="apple-touch-icon" sizes="114x114" href="icons/beer-114-270546.png" />
+	<link rel="apple-touch-icon" sizes="144x144" href="icons/beer-144-270546.png" />
+    <link rel="stylesheet" href="css/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/jquery-ui.theme.min.css"/>
+	<!-- this line removes any default padding and style. you might only need one of these values set. -->
+  	<!--<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">-->
+  	<link rel="stylesheet" href="css/lobipanel.min.css"/>
+
+	<style> body {padding: 0; margin: 0; font-size:14px;} </style>
+	<title>Brew Controller</title>
+	
+	<style type="text/css">
+	html, body {
+		text-align:center;
+		background-color:#111;
+		color:gray;
+	  	margin: 0;
+	}
+	#page-wrap {
+	  	text-align: center;
+	  	margin: 0;
+	}
+	header {
+		text-align:center;
+		font-size:xx-large;
+		/*width:100%;*/
+	  	margin: 0;
+	}
+	#controls {
+		text-align: center;
+	  	margin: 0;
+	}
+	#controls-wrapper {
+		text-align:center;
+	  	margin: 0;
+	}
+	div[class=controlChart]{
+		text-align:center;
+	  	margin: 0;
+	}
+	.controls {
+		float:left;
+	}
+	.hideContent{
+		display:none;
+	}
+	#chart0panel, #chart1panel, #chart2panel{
+		display:none;
+	}
+	.collapse{
+		display:none;
+	}
+	.clickable {
+	    cursor: pointer;
+	}
+	.recipe-node-click{
+    	color: #fff;
+    	background-color: #333333;
+    	border-color: #0d0d0d;
+	}
+	.countDownTimer{
+		vertical-align:middle;
+		font-size:2em;
+	}
+	.control-btn{
+    	color: #fff;
+    	background-color: #333333;
+    	border-color: #0d0d0d;
+	}
+	.recipe-node-clicked{
+    	color: #fff;
+    	background-color: #0099cc;
+    	border-color: #0d0d0d;
+	}
+	.recipe-node-click.flip-panel{
+	    display: none;
+	}	
+	.recipe-node-clicked.flip-panel{
+	    display: block;
+	}	
+	.flip-container.visible .flip-panel{
+    	color: #fff;
+    	background-color: #00ccff;
+    	border-color: #0d0d0d;
+	}
+	.flip-container.not-visible a{
+    	color: #fff;
+    	background-color: #333333;
+    	border-color: #0d0d0d;
+	}
+	.pull-left {
+		text-align:left;
+	}
+	.modal-scrollfix.modal-scrollfix {
+	    overflow-y: hidden;
+	}
+	#upload-input {
+		display: none;
+	}
+	.upload-btn {
+		color: #ffffff;
+		background-color: #F89406;
+		border: none;
+	}
+
+	.upload-btn:hover,
+	.upload-btn:focus,
+	.upload-btn:active,
+	.upload-btn.active {
+		color: #ffffff;
+		background-color: #FA8900;
+		border: none;
+	}
+	.upload-panel{
+		display:none;
+	}
+	
+	@keyframes glowing {
+		0% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+		50% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
+		100% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+	}
+	
+	.glowing {
+		animation: glowing 1500ms infinite;
+	}
+	
+	.inputFieldError {
+		background-color: #FF9999;
+	}
+	
+</style>
+    <script>
+    /* global $ io */
+    	var recipeData;
+		var beerXMLmap;
+		var autoOK = false;
+		var useMashProfile = null;
+		var SETTINGS;
+		var brewSchedule = [];
+		var unprocessedMiscItems = [];
+		var brewClock = 0;
+		var previousStep;
+		var brewState;
+		var abortTimeout;
+		var endBrewingTimeout;
+		var stepData;
+		var equipment_process;
+		var pageRefresh = true;
+		var sound;
+
+		init(beerXMLmap);
+		
+		function init(data) {
+			loadBeerXMLmap(function(response) {
+				data = (JSON && JSON.parse(response) || $.parseJSON(response));
+				beerXMLmap = JSON.stringify(data);  // < this works
+				return beerXMLmap;
+			});
+		}
+		function jq( myid ) {
+		    return "#" + myid.replace( /(:|\.|\[|\]|,|=|@)/g, "\\$1" );
+		}
+		function writeSocket(data1, data2) {
+			var socket = io.connect();
+	    	socket.emit(data1, data2);
+		}
+		function loadBeerXMLmap(callback) {   
+			var xobj = new XMLHttpRequest();
+		    xobj.overrideMimeType("application/json");
+			xobj.open('GET', 'jsonFiles/beerXML_map.json', true); // Replace 'my_data' with the path to your file
+			xobj.onreadystatechange = function () {
+				if (xobj.readyState == 4 && xobj.status == "200") {
+					// Required use of an anonymous callback as .open will NOT return a value but simply returns undefined in asynchronous mode
+					callback(xobj.responseText);
+				}	
+			};
+			xobj.send(null);  
+		}
+		
+		function getRecipeList(){
+			// Read the recipes from the json file and append each recipe to the drop down list
+			$.getJSON("jsonFiles/recipes.json",
+				function( data ) {
+					$('#selectRecipe').find('option').remove();
+					$('#selectRecipe').append($('<option>', {
+						selected: "selected",
+			    		value: "none",
+			    		text: "No Recipe"
+					}));
+					$('#selectRecipe').append($('<option>', {
+			    		value: "upload",
+			    		text: "Upload"
+					}));
+					$.each( data.recipe, function( key, val ) {
+						if(val == data.recipe[0]) {
+							$('#selectRecipe').append($('<option>', {
+					    		value: val,
+					    		text: val.slice(0, -4)
+							}));
+						}else{
+					    	$('#selectRecipe').append($('<option>', {
+					    		value: val,
+					    		text: val.slice(0, -4)
+							}));
+						}
+					});
+				}
+			);		
+		}
+
+		function evaluateControls(){		
+			if($('#paused').val()=="TRUE"){
+				BackBtnState('disable');
+				StopBtnState('enable');
+				PauseBtnState('enable');
+				PlayBtnState('disable');
+				ForwardBtnState('disable');
+				$('.play').removeClass('glowing');
+				$('.body').removeClass('glowing');
+				$('.pause').addClass('glowing');
+			} else {
+				if(stepData.ack == "TRUE"){
+					PauseBtnState('disable');
+					PlayBtnState('enable');
+					$('.play').addClass('glowing');
+					$('.body').addClass('glowing');
+				} else {
+					if(stepData.wait == "TIME"){
+						BackBtnState('enable');
+						StopBtnState('enable');
+						ForwardBtnState('enable');
+						PlayBtnState('disable');
+						PauseBtnState('enable');
+						$('.play').removeClass('glowing');
+						$('.body').removeClass('glowing');
+					} else {
+						if(stepData.wait == "TEMP"){
+							BackBtnState('enable');
+							StopBtnState('enable');
+							ForwardBtnState('enable');
+							PlayBtnState('disable');
+							$('.play').removeClass('glowing');
+							$('.body').removeClass('glowing');
+						} else {
+							BackBtnState('enable');
+							StopBtnState('enable');
+							PauseBtnState('enable');
+							PlayBtnState('enable');
+							ForwardBtnState('enable');
+							$('.play').removeClass('glowing');
+							$('.body').removeClass('glowing');
+						}
+					}
+				}
+			}
+		}
+
+		function clearRecipes(){
+			$( ".recipe-container" ).empty();
+			$( ".mash-schedule" ).empty();
+			$( ".first-wort-schedule" ).empty();
+			$( ".boil-schedule" ).empty();
+			$( ".aroma-schedule" ).empty();
+			$( ".measure-og-schedule" ).empty();
+			$( ".pitch-schedule" ).empty();
+			$( ".primary-schedule" ).empty();
+			$( ".secondary-schedule" ).empty();
+			$( ".bottling-schedule" ).empty();
+		}
+		function hideRecipeContainers(){
+			document.getElementById("primary-schedule").style = "display:none";
+			document.getElementById("secondary-schedule").style = "display:none";
+			document.getElementById("bottling-schedule").style = "display:none";
+		}
+		function setUserVolumeUnits(volumeUnits){
+			var data = document.getElementsByClassName('volume');
+			var conversionFactors = {"L":[1,"L"], "mL":[1000,"ml"], "gal":[0.26417,"gal"], "oz":[33.814,"fl oz"], "qt":[1.0567,"qt"]};
+			[].slice.call( data ).forEach(function ( data ) {
+    			var namePath = ($(data).attr('id')).replace(/recipeJSON./, "");
+    			if(namePath.substr(0,9)=='schedule-'){
+    				namePath = namePath.substr(9,namePath.length);
+    			}
+    			var value = Object.byString(recipeData, namePath);
+				var oldUnitClass = $.grep(data.className.split(" "), function(v, i){
+					return v.indexOf('units-') === 0;
+				}).join();
+				var multiplier = conversionFactors[volumeUnits][0];
+				var newUnits = conversionFactors[volumeUnits][1];
+				$(data).removeClass(oldUnitClass);
+				$(data).addClass('units-'+volumeUnits);
+				// var replaceString = ": "+value*multiplier+" "+newUnits;
+				var replaceString = ": "+((Math.round((value*multiplier)*100))/100)+" "+newUnits;
+				data.innerHTML = data.innerHTML.replace(/:.*/, replaceString);
+			});
+		}
+		
+    	function setUserTempUnits(tempUnits){
+			document.getElementById('temperatureType').value = tempUnits;
+			if(tempUnits == "F"){
+				var data = document.getElementsByClassName('units-C');
+				[].slice.call( data ).forEach(function ( data ) {
+					$(data).removeClass('units-C');
+					$(data).addClass('units-F');
+					var tempValue = data.innerHTML.match(": (.*) °C");
+					tempValue = (Math.round((+tempValue[1]*1.8+32)*100))/100;
+				    data.innerHTML = data.innerHTML.replace(/: .* °C/,': ' + tempValue + ' °F');
+				});
+				document.getElementById("boilTemperature").value = (Math.round((+document.getElementById("boilTemperature").value*1.8+32)*100))/100;
+				writeSocket('boilTemperature',document.getElementById('boilTemperature').value);
+			} else {
+				if(tempUnits == "C"){
+					data = document.getElementsByClassName('units-F');
+					[].slice.call( data ).forEach(function ( data ) {
+						$(data).removeClass('units-F');
+						$(data).addClass('units-C');
+						var tempValue = data.innerHTML.match(": (.*) °F");
+						tempValue = (Math.round((+tempValue[1]-32)/1.8*100))/100;
+					    data.innerHTML = data.innerHTML.replace(/: .* °F/,': ' + tempValue + ' °C');
+					});
+					document.getElementById("boilTemperature").value = (Math.round((+document.getElementById("boilTemperature").value-32)/1.8*100))/100;
+					writeSocket('boilTemperature',document.getElementById('boilTemperature').value);
+				}
+			}
+    	}
+		function setUserWeightUnits(weightUnits){
+			var data = document.getElementsByClassName('weight');
+			var conversionFactors = {"kg":[1,"kg"], "g":[1000,"g"], "mg":[1000000,"mg"], "oz":[35.274,"oz"], "lb":[2.2046,"lb"]};
+			[].slice.call( data ).forEach(function ( data ) {
+    			var namePath = ($(data).attr('id')).replace(/recipeJSON./, "");
+    			if(namePath.substr(0,9)=='schedule-'){
+    				namePath = namePath.substr(9,namePath.length);
+    			}
+    			var value = Object.byString(recipeData, namePath);
+				var oldUnitClass = $.grep(data.className.split(" "), function(v, i){
+					return v.indexOf('units-') === 0;
+				}).join();
+				var multiplier = conversionFactors[weightUnits][0];
+				var newUnits = conversionFactors[weightUnits][1];
+				$(data).removeClass(oldUnitClass);
+				$(data).addClass('units-'+weightUnits);
+				// var replaceString = ": "+value*multiplier+" "+newUnits;
+				var replaceString = ": "+((Math.round((value*multiplier)*100))/100)+" "+newUnits;
+				data.innerHTML = data.innerHTML.replace(/:.*/, replaceString);
+			});
+		}
+		
+		function validateWifiConfig(data, callback){
+			if (data.bssid != null && data.bssid !=""){
+				if (data.ssid != null && data.ssid !=""){
+					if (data.dhcp){
+						if (data.encrypted){
+							if (data.pass != null && data.pass !=""){
+								data.validation = "true";
+								results = data;
+								callback(results);
+							}
+						} else {
+							data.validation = "true";
+							results = data;
+							callback(results);
+						}
+					} else {
+						if (data.encrypted){
+							if (data.pass != null && data.pass !=""){
+								if (data.ip != null && data.ip !=""){
+									if (data.subnet != null && data.subnet !=""){
+										data.validation = "true";
+										results = data;
+										callback(results);
+									}
+								}
+							}
+						} else {
+							if (data.ip != null && data.ip !=""){
+								if (data.subnet != null && data.subnet !=""){
+									data.validation = "true";
+									results = data;
+									callback(results);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		function processSchedule(){
+			var scheduler = $("div.scheduler");
+			var data = $(scheduler).find('a');
+			var category = "Step Undefined";
+			var tempUnits = $('input[name=unitsRadioBtn]:checked').val();
+			var step = 0;
+			var boil_temp = document.getElementById('boilTemperature').value + " °" + tempUnits;
+			var boilWaterAmount = document.getElementById('recipeJSON.BOIL_SIZE[0]').innerText.replace(/BOIL SIZE: /,"");
+			var boilEquip = $('#selectEquipBoil option:selected').text();
+			var boilEquipID = $('#selectEquipBoil option:selected').val().match(/EQUIPMENT\[(.*?)\]/)[1];
+    		var infuseEquip = $('#selectEquipMashInfusion option:selected').text();
+			var infuseEquipID = $('#selectEquipMashInfusion option:selected').val().match(/EQUIPMENT\[(.*?)\]/)[1];
+			var mashEquip = $('#selectEquipMashTemp option:selected').text();
+			var mashEquipID = $('#selectEquipMashTemp option:selected').val().match(/EQUIPMENT\[(.*?)\]/)[1];
+			var decoctionEquip = $('#selectEquipMashDecoction option:selected').text();
+			var decoctionEquipID = $('#selectEquipMashDecoction option:selected').val().match(/EQUIPMENT\[(.*?)\]/)[1];
+			try{
+				var water = $("[id$='WATER[0].NAME[0]']")[0].innerText.replace(/NAME: /,"");
+				var water_amount = $("[id$='WATER[0].AMOUNT[0]']")[0].innerText.replace(/AMOUNT: /,"");
+			} catch (err){
+				water = "water";
+				water_amount = "";
+			}
+			brewSchedule = [];
+			brewClock = 0;
+			[].slice.call( data ).forEach(function ( dataItem ) {
+				try{
+					switch(dataItem.innerText) {
+			        	case "MASH": 
+			        		if(water_amount != ""){
+			        			var waterSubString = water_amount + " of " + water+ " ";
+			        		} else {
+			        			waterSubString = "";
+			        		}
+        					category = dataItem.innerText;
+	        				brewSchedule.push({
+	        					CLOCK: brewClock,
+	        					TIME: "0",
+	        					PROCESS: category,
+	        					INFO: "",
+	        					STEP: "Transfer " + waterSubString +"water to " + infuseEquip + ".",
+	        					TEMP: "",
+	        					EQUIP: infuseEquip,
+	        					EQUIPID: infuseEquipID,
+	        					AMOUNT: "",
+	        					ACK: "TRUE",
+	        					STEPNUM: step++,
+	        					WAIT: ""
+        					});
+	        				brewSchedule.push({
+	        					CLOCK: brewClock,
+	        					TIME: "0",
+	        					PROCESS: category,
+	        					INFO: "Begin " + category.toLowerCase(),
+	        					STEP: "",
+	        					TEMP: "",
+	        					EQUIP: "",
+	        					EQUIPID: "",
+	        					AMOUNT: "",
+					        	ACK: "FALSE",
+	        					STEPNUM: step++,
+	        					WAIT: ""
+        					});
+			        		break;
+
+			        	case "BOIL": 
+			        		category = dataItem.innerText;
+	        				brewSchedule.push({
+	        					CLOCK: brewClock,
+	        					TIME: "0",
+	        					PROCESS: category,
+	        					INFO: "Begin " + category.toLowerCase(),
+	        					STEP: "",
+	        					TEMP: "",
+	        					EQUIP: "",
+	        					EQUIPID: "",
+	        					AMOUNT: "",
+					        	ACK: "FALSE",
+	        					STEPNUM: step++,
+	        					WAIT: ""
+        					});
+	        				brewSchedule.push({
+	        					CLOCK: brewClock,
+	        					TIME: "0",
+	        					PROCESS: category,
+	        					INFO: "",
+	        					STEP: "Transfer " + boilWaterAmount +" of water from " + infuseEquip + " to " + boilEquip + ".",
+	        					TEMP: "",
+	        					EQUIP: boilEquip,
+	        					EQUIPID: boilEquipID,
+	        					AMOUNT: "",
+	        					ACK: "TRUE",
+	        					STEPNUM: step++,
+	        					WAIT: ""
+        					});
+	        				brewSchedule.push({
+	        					CLOCK: brewClock,
+	        					TIME: "0",
+	        					PROCESS: category,
+	        					INFO: "",
+	        					STEP: "Setting "+ boilEquip + " to " + boil_temp,
+	        					TEMP: boil_temp,
+	        					EQUIP: boilEquip,
+	        					EQUIPID: boilEquipID,
+	        					AMOUNT: "",
+					        	ACK: "FALSE",
+	        					STEPNUM: step++,
+	        					WAIT: ""
+        					});
+	        				brewSchedule.push({
+	        					CLOCK: brewClock,
+	        					TIME: "0",
+	        					PROCESS: category,
+	        					INFO: "",
+	        					STEP: "Waiting for "+ boilEquip + " to reach " + boil_temp,
+	        					TEMP: boil_temp,
+	        					EQUIP: boilEquip,
+	        					EQUIPID: boilEquipID,
+	        					AMOUNT: "",
+					        	ACK: "FALSE",
+					        	STEPNUM: step++,
+	        					WAIT: "TEMP"
+        					});
+        					var boilTime = parseInt(Object.byString(recipeData, "BOIL_TIME[0]"), 10);
+	        				brewSchedule.push({
+	        					CLOCK: brewClock + boilTime,
+	        					TIME: boilTime,
+	        					PROCESS: category,
+	        					INFO: "",
+	        					STEP: "Boiling for " + boilTime + " minutes.",
+	        					TEMP: "",
+	        					EQUIP: boilEquip,
+	        					EQUIPID: boilEquipID,
+	        					AMOUNT: "",
+					        	ACK: "FALSE",
+					        	STEPNUM: step++,
+	        					WAIT: "TIME"
+        					});
+			        		break;
+			        	case "MEASURE OG": 
+			        		category = dataItem.innerText;
+	        				brewSchedule.push({
+	        					CLOCK: brewClock,
+	        					TIME: "0",
+	        					PROCESS: category,
+	        					INFO: "Begin " + category.toLowerCase(),
+	        					STEP: "",
+	        					TEMP: "",
+	        					EQUIP: "",
+	        					EQUIPID: "",
+	        					AMOUNT: "",
+					        	ACK: "FALSE",
+	        					STEPNUM: step++,
+	        					WAIT: ""
+        					});
+        					break;
+			        	// case "PITCH": 
+			        	// 	category = dataItem.innerText;
+	        			// 	brewSchedule.push({
+	        			// 		CLOCK: brewClock,
+	        			// 		TIME: "0",
+	        			// 		PROCESS: category,
+	        			// 		INFO: "Begin " + category.toLowerCase(),
+	        			// 		STEP: "",
+	        			// 		TEMP: "",
+	        			// 		EQUIP: "",
+	        			// 		EQUIPID: "",
+	        			// 		AMOUNT: "",
+					       // 	ACK: "TRUE",
+	        			// 		STEPNUM: step++,
+	        			// 		WAIT: ""
+        				// 	});
+        				// 	break;
+			        	// case "PRIMARY": 
+			        	// 	category = dataItem.innerText;
+	        			// 	brewSchedule.push({
+	        			// 		CLOCK: brewClock,
+	        			// 		TIME: "0",
+	        			// 		PROCESS: category,
+	        			// 		INFO: "Begin " + category.toLowerCase(),
+	        			// 		STEP: "",
+	        			// 		TEMP: "",
+	        			// 		EQUIP: "",
+	        			// 		EQUIPID: "",
+	        			// 		AMOUNT: "",
+					       // 	ACK: "TRUE",
+	        			// 		STEPNUM: step++,
+	        			// 		WAIT: ""
+        				// 	});
+        				// 	break;
+			        	// case "SECONDARY": 
+			        	// 	category = dataItem.innerText;
+	        			// 	brewSchedule.push({
+	        			// 		CLOCK: brewClock,
+	        			// 		TIME: "0",
+	        			// 		PROCESS: category,
+	        			// 		INFO: "Begin " + category.toLowerCase(),
+	        			// 		STEP: "",
+	        			// 		TEMP: "",
+	        			// 		EQUIP: "",
+	        			// 		EQUIPID: "",
+	        			// 		AMOUNT: "",
+					       // 	ACK: "TRUE",
+	        			// 		STEPNUM: step++,
+	        			// 		WAIT: ""
+        				// 	});
+        				// 	break;
+			        	// case "BOTTLING": 
+			        	// 	category = dataItem.innerText;
+	        			// 	brewSchedule.push({
+	        			// 		CLOCK: brewClock,
+	        			// 		TIME: "0",
+	        			// 		PROCESS: category,
+	        			// 		INFO: "Begin " + category.toLowerCase(),
+	        			// 		STEP: "",
+	        			// 		TEMP: "",
+	        			// 		EQUIP: "",
+	        			// 		EQUIPID: "",
+	        			// 		AMOUNT: "",
+					       // 	ACK: "TRUE",
+	        			// 		STEPNUM: step++,
+	        			// 		WAIT: ""
+        				// 	});
+        				// 	break;
+		        		default: break;
+					}
+	        		if($(dataItem).attr('id')){
+						// console.log(category+": "+$(dataItem).attr('id'));
+	        		} else{
+	        			if(category == dataItem.innerText){
+							//do nothing
+	        			} else {
+		        			var subcategory = (dataItem.innerText.match("(.*):"))[1];
+			        		var rootPath = $(dataItem).closest('.node').find('div').attr('id');
+			        		var namePath = rootPath.replace(/schedule-recipeJSON./, "")+".NAME[0]";
+			        		var typePath = rootPath.replace(/schedule-recipeJSON./, "")+".TYPE[0]";
+			        		var name = Object.byString(recipeData, namePath);
+			        		var type = Object.byString(recipeData, typePath);
+			        		try{
+				        		var timePath = rootPath.replace(/schedule-recipeJSON./, "")+".TIME[0]";
+				        		var amount = (document.getElementById(rootPath+".AMOUNT[0]").innerText).replace("AMOUNT: ","");
+				        		var time = Object.byString(recipeData, timePath);
+				        		var addition = ($(document.getElementById(rootPath)).siblings('p').find('a')[0].innerText).match("(.*):")[1];
+			        		}
+			        		catch(err){}
+							switch(subcategory) {
+					        	case "FERMENTABLE": 
+					        		// Fermentables are loaded during the first MASH_STEP
+					        		break;
+				        		case "MASH":
+				        			// console.log("INFO: Mash Profile: "+name);
+			        				brewSchedule.push({
+			        					CLOCK: brewClock,
+			        					TIME: "0",
+			        					PROCESS: category,
+			        					INFO: "Mash Profile: "+name,
+			        					STEP: "",
+			        					TEMP: "",
+			        					EQUIP: "",
+			        					EQUIPID: "",
+			        					AMOUNT: "",
+					        			ACK: "FALSE",
+			        					STEPNUM: step++,
+			        					WAIT: ""
+		        					});
+				        			break;
+			        			case "BOIL-MISC":
+			        				//Store miscellaneous items to insert into the brew schedule after all other steps have been processed.
+			        				unprocessedMiscItems.push({
+			        					NAME: name,
+			        					AMOUNT: amount,
+			        					TIME: time,
+			        					PROCESS: category,
+			        					TYPE: addition
+		        					});
+			        				break;
+			        			case "MASH-MISC":
+			        				if(type == "Water Agent"){
+				        				brewSchedule.push({
+				        					CLOCK: brewClock,
+				        					TIME: "0",
+				        					PROCESS: category,
+				        					INFO: "",
+				        					STEP: "Add " + amount + " of " + name + " to " + mashEquip + ".",
+				        					TEMP: "",
+				        					EQUIP: mashEquip,
+				        					EQUIPID: mashEquipID,
+				        					AMOUNT: "",
+						        			ACK: "TRUE",
+				        					STEPNUM: step++,
+				        					WAIT: ""
+			        					});			        					
+			        				} else {
+				        				//Store other miscellaneous items to insert into the brew schedule after all other steps have been processed.
+										unprocessedMiscItems.push({
+				        					NAME: name,
+				        					AMOUNT: amount,
+				        					TIME: time,
+				        					PROCESS: category,
+				        					TYPE: addition
+			        					});
+			        				}
+			        				break;
+			        			case "PRIMARY-MISC":
+			        				//Store miscellaneous items to insert into the brew schedule after all other steps have been processed.
+			        				unprocessedMiscItems.push({
+			        					NAME: name,
+			        					AMOUNT: amount,
+			        					TIME: time,
+			        					PROCESS: category,
+			        					TYPE: addition
+		        					});
+			        				break;
+			        			case "SECONDARY-MISC":
+			        				//Store miscellaneous items to insert into the brew schedule after all other steps have been processed.
+			        				unprocessedMiscItems.push({
+			        					NAME: name,
+			        					AMOUNT: amount,
+			        					TIME: time,
+			        					PROCESS: category,
+			        					TYPE: addition
+		        					});
+			        				break;
+			        			case "BOTTLING-MISC":
+			        				//Store miscellaneous items to insert into the brew schedule after all other steps have been processed.
+			        				unprocessedMiscItems.push({
+			        					NAME: name,
+			        					AMOUNT: amount,
+			        					TIME: time,
+			        					PROCESS: category,
+			        					TYPE: addition
+		        					});
+			        				break;
+				        		case "MASH STEP":
+				        			var stepNumber = rootPath.match(/MASH_STEP\[(.*?)\]/)[1];
+			        				brewSchedule.push({
+			        					CLOCK: brewClock,
+			        					TIME: "0",
+			        					PROCESS: category,
+			        					INFO: ($(document.getElementById(rootPath)).siblings('p').find('a')[0].innerText).replace(/MASH_STEP: /,""),
+			        					STEP: "",
+			        					TEMP: "",
+			        					EQUIP: "",
+			        					EQUIPID: "",
+			        					AMOUNT: "",
+					        			ACK: "FALSE",
+			        					STEPNUM: step++,
+			        					WAIT: ""
+		        					});
+		        					var infuse_amount = document.getElementById(rootPath+'.INFUSE_AMOUNT[0]').innerText.match(": (.*)")[1];
+		        					var step_time = document.getElementById(rootPath+'.STEP_TIME[0]').innerText.match(": (.*)")[1];
+		        					var step_temp = document.getElementById(rootPath+'.STEP_TEMP[0]').innerText.match(": (.*)")[1];
+		        					try{
+		        						var ramp_time = document.getElementById(rootPath+'.RAMP_TIME[0]').innerText.match(": (.*)")[1];
+		        					}
+		        					catch(err){}
+				        			switch(type.trim()){
+				        				case "Infusion":
+						        			if(stepNumber == '0'){
+												var fermentables = $("#main-mash-schedule").find('.FERMENTABLE').find('a');
+												[].slice.call( fermentables ).forEach(function ( fermentableData ) {
+													try{
+														switch(fermentableData.innerText.match("(.*):")[1]) {
+												        	case "FERMENTABLE": 
+												        		var qtyID = $(fermentableData).closest('.node').find('div').attr('id')+".AMOUNT[0]";
+												        		var qty = document.getElementById(qtyID).innerText.replace(/AMOUNT: /,"");
+												        		var fermentable = fermentableData.innerText.match(": (.*)")[1];
+										        				brewSchedule.push({
+										        					CLOCK: brewClock,
+										        					TIME: "0",
+										        					PROCESS: category,
+										        					INFO: "",
+										        					STEP: "Add "+ qty + " of " +fermentable+" to "+mashEquip+".",
+										        					TEMP: "",
+										        					EQUIP: mashEquip,
+										        					EQUIPID: mashEquipID,
+										        					AMOUNT: "",
+										        					ACK: "TRUE",
+										        					STEPNUM: step++,
+										        					WAIT: ""
+									        					});
+												        		break;
+											        		default: break;
+														}
+													}
+													catch(err){}
+												});
+						        			}
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: "0",
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Set " + infuseEquip + " temperature to " + step_temp +".",
+					        					TEMP: step_temp,
+					        					EQUIP: infuseEquip,
+					        					EQUIPID: infuseEquipID,
+					        					AMOUNT: "",
+					        					ACK: "FALSE",
+					        					STEPNUM: step++,
+					        					WAIT: ""
+				        					});
+				        					if(parseInt(ramp_time,10)>0){
+					        					brewClock = brewClock + parseInt(ramp_time, 10);
+						        				brewSchedule.push({
+						        					CLOCK: brewClock,
+						        					TIME: parseInt(ramp_time, 10),
+						        					PROCESS: category,
+						        					INFO: "",
+						        					STEP: "Waiting "+ramp_time+" for "+infuseEquip+" temperature ramp time.",
+						        					TEMP: "",
+						        					EQUIP: infuseEquip,
+						        					EQUIPID: infuseEquipID,
+						        					AMOUNT: "",
+						        					ACK: "FALSE",
+						        					STEPNUM: step++,
+						        					WAIT: "TIME"
+					        					});
+				        					} else {
+						        				brewSchedule.push({
+						        					CLOCK: brewClock,
+						        					TIME: "0",
+						        					PROCESS: category,
+						        					INFO: "",
+						        					STEP: "Wait for "+infuseEquip+" to reach "+step_temp+".",
+						        					TEMP: step_temp,
+						        					EQUIP: infuseEquip,
+						        					EQUIPID: infuseEquipID,
+						        					AMOUNT: "",
+						        					ACK: "FALSE",
+						        					STEPNUM: step++,
+						        					WAIT: "TEMP"	
+					        					});
+				        					}
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: "0",
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Transfer "+infuse_amount+" of water from "+infuseEquip+" to "+mashEquip+".",
+					        					TEMP: "",
+					        					EQUIP: "",
+					        					EQUIPID: "",
+					        					AMOUNT: "",
+					        					ACK: "TRUE",
+					        					STEPNUM: step++,
+					        					WAIT: ""
+				        					});
+				        					brewClock = brewClock + parseInt(step_time, 10);
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: parseInt(step_time, 10),
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Waiting "+step_time+".",
+					        					TEMP: "",
+					        					EQUIP: "",
+					        					EQUIPID: "",
+					        					AMOUNT: "",
+					        					ACK: "FALSE",
+					        					STEPNUM: step++,
+					        					WAIT: "TIME"
+				        					});
+				        					break;
+				        				case "Temperature":
+						        			if(stepNumber == '0'){
+												fermentables = $("#main-mash-schedule").find('.FERMENTABLE').find('a');
+												[].slice.call( fermentables ).forEach(function ( fermentableData ) {
+													try{
+														switch(fermentableData.innerText.match("(.*):")[1]) {
+												        	case "FERMENTABLE": 
+												        		var qtyID = $(fermentableData).closest('.node').find('div').attr('id')+".AMOUNT[0]";
+												        		var qty = document.getElementById(qtyID).innerText.replace(/AMOUNT: /,"");
+												        		var fermentable = fermentableData.innerText.match(": (.*)")[1];
+										        				brewSchedule.push({
+										        					CLOCK: brewClock,
+										        					TIME: "0",
+										        					PROCESS: category,
+										        					INFO: "",
+										        					STEP: "Add "+ qty + " of " +fermentable+" to "+mashEquip+".",
+										        					TEMP: "",
+										        					EQUIP: "",
+										        					EQUIPID: "",
+										        					AMOUNT: "",
+										        					ACK: "TRUE",
+										        					STEPNUM: step++,
+										        					WAIT: ""
+									        					});
+												        		break;
+											        		default: break;
+														}
+													}
+													catch(err){}
+												});
+						        			}
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: "0",
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Setting " + mashEquip + " temperature to " + step_temp +".",
+					        					TEMP: step_temp,
+					        					EQUIP: mashEquip,
+					        					EQUIPID: mashEquipID,
+					        					AMOUNT: "",
+					        					ACK: "FALSE",
+					        					STEPNUM: step++,
+					        					WAIT: ""
+				        					});
+				        					if(parseInt(ramp_time,10)>0){
+					        					brewClock = brewClock + parseInt(ramp_time, 10);
+						        				brewSchedule.push({
+						        					CLOCK: brewClock,
+						        					TIME: parseInt(ramp_time, 10),
+						        					PROCESS: category,
+						        					INFO: "",
+						        					STEP: "Waiting "+ramp_time+" for "+mashEquip+" temperature ramp time.",
+						        					TEMP: "",
+						        					EQUIP: mashEquip,
+						        					EQUIPID: mashEquipID,
+						        					AMOUNT: "",
+						        					ACK: "FALSE",
+						        					STEPNUM: step++,
+						        					WAIT: "TIME"
+					        					});
+				        					} else {
+						        				brewSchedule.push({
+						        					CLOCK: brewClock,
+						        					TIME: "0",
+						        					PROCESS: category,
+						        					INFO: "",
+						        					STEP: "Waiting for "+mashEquip+" to reach "+step_temp+".",
+						        					TEMP: step_temp,
+						        					EQUIP: mashEquip,
+						        					EQUIPID: mashEquipID,
+						        					AMOUNT: "",
+						        					ACK: "FALSE",
+						        					STEPNUM: step++,
+						        					WAIT: "TEMP"
+					        					});
+				        					}
+				        					brewClock = brewClock + parseInt(step_time, 10);
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: parseInt(step_time, 10),
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Waiting "+step_time+".",
+					        					TEMP: "",
+					        					EQUIP: mashEquip,
+					        					EQUIPID: mashEquipID,
+					        					AMOUNT: "",
+					        					ACK: "FALSE",
+					        					STEPNUM: step++,
+					        					WAIT: "TIME"
+				        					});
+				        					break;
+				        				case "Decoction":
+						    				var decoctionAmount = (parseInt(water_amount,10))*(1/3);
+						    				var units = document.getElementById('volumeType').value;
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: "0",
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Transfer " + decoctionAmount + " " + units + " of wort from " + mashEquip + " to " + decoctionEquip +".",
+					        					TEMP: "",
+					        					EQUIP: "",
+					        					EQUIPID: "",
+					        					AMOUNT: "",
+					        					ACK: "TRUE",
+					        					STEPNUM: step++,
+					        					WAIT: ""
+				        					});
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: "0",
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Setting " + decoctionEquip + " temperature to " + boil_temp +".",
+					        					TEMP: boil_temp,
+					        					EQUIP: decoctionEquip,
+					        					EQUIPID: decoctionEquipID,
+					        					AMOUNT: "",
+					        					ACK: "FALSE",
+					        					STEPNUM: step++,
+					        					WAIT: ""
+				        					});
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: "0",
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Waiting for "+ decoctionEquip +" to reach "+boil_temp+".",
+					        					TEMP: boil_temp,
+					        					EQUIP: decoctionEquip,
+					        					EQUIPID: decoctionEquipID,
+					        					AMOUNT: "",
+					        					ACK: "FALSE",
+					        					STEPNUM: step++,
+					        					WAIT: "TEMP"
+				        					});
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: "0",
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Transfer " + decoctionAmount + " " + units + " of wort from " + decoctionEquip + " to " + mashEquip +".",
+					        					TEMP: "",
+					        					EQUIP: "",
+					        					EQUIPID: "",
+					        					AMOUNT: "",
+					        					ACK: "TRUE",
+					        					STEPNUM: step++,
+					        					WAIT: ""
+				        					});
+				        					brewClock = brewClock + parseInt(step_time, 10);
+					        				brewSchedule.push({
+					        					CLOCK: brewClock,
+					        					TIME: parseInt(step_time, 10),
+					        					PROCESS: category,
+					        					INFO: "",
+					        					STEP: "Wait "+step_time+".",
+					        					TEMP: "",
+					        					EQUIP: "",
+					        					EQUIPID: "",
+					        					AMOUNT: "",
+					        					ACK: "FALSE",
+					        					STEPNUM: step++,
+					        					WAIT: "TIME"
+				        					});
+				        					break;
+			        					default: break;
+				        			}
+				        			break;
+			        			case "HOP":
+			        				if($(dataItem).closest('div').parent('div').attr('id') == 'main-first-wort-schedule'){
+				        				unprocessedMiscItems.push({
+				        					NAME: name,
+				        					AMOUNT: amount,
+				        					TIME: time,
+				        					PROCESS: "FIRST WORT",
+				        					TYPE: addition
+			        					});	
+			        				} else {
+				        				unprocessedMiscItems.push({
+				        					NAME: name,
+				        					AMOUNT: amount,
+				        					TIME: time,
+				        					PROCESS: category,
+				        					TYPE: addition
+			        					});	
+			        				}
+			        				break;
+				        		default: break;
+							}
+	        			}
+	        		}
+				}
+				catch(err){}
+			});
+			writeSocket('brewSchedule', [brewSchedule, unprocessedMiscItems]);
+			jQuery('#overlay').fadeOut();
+		}
+		function BackBtnState(state){
+			if(state=='enable'){
+				$('.step-backward').removeClass('disabled').addClass('enabled');
+			} else if(state=='disable'){
+				$('.step-backward').removeClass('enabled').addClass('disabled');
+			}
+		}
+		function StopBtnState(state){
+			if(state=='enable'){
+				$('.stop').removeClass('disabled').addClass('enabled');
+			} else if(state=='disable'){
+				$('.stop').removeClass('enabled').addClass('disabled');
+			}
+		}
+		function PlayBtnState(state){
+			if(state=='enable'){
+				$('.play').removeClass('disabled').addClass('enabled');
+			} else if(state=='disable'){
+				$('.play').removeClass('enabled').addClass('disabled');
+			}
+		}
+		function PauseBtnState(state){
+			if(state=='enable'){
+				$('.pause').removeClass('disabled').addClass('enabled');
+			} else if(state=='disable'){
+				$('.pause').removeClass('enabled').addClass('disabled');
+			}
+		}
+		function ForwardBtnState(state){
+			if(state=='enable'){
+				$('.step-forward').removeClass('disabled').addClass('enabled');
+			} else if(state=='disable'){
+				$('.step-forward').removeClass('enabled').addClass('disabled');
+			}
+		}
+
+    	try{
+		    function recipeController($scope) {
+				var heartBeatID = 1;
+				var lastHeartBeatID;
+				var socket = io.connect();
+				var alreadyNotified = false;
+				$scope.equipmentName = '';
+				$scope.recipe = {};
+				//if(pageRefresh == true){
+				//	writeSocket("newClientConnection");	
+					//pageRefresh == false;
+				//}
+					
+				socket.on('connect', function () {
+					
+				});
+				socket.on('activeBrewState', function (data) {
+					brewState = data;
+					// console.log(brewState);
+					document.getElementById("loaderText").innerHTML = "Creating Brew Schedule for "+brewState.recipe+"...";
+					if(brewState.brewingActive == true && pageRefresh == true){
+						$('.resumebrewing').modal('show');
+						pageRefresh = false;
+					}
+					if(brewState.recipe == "none") {
+						jQuery('#overlay').fadeOut();
+					}
+				});
+
+				socket.on('brewingComplete', function () {
+					BackBtnState('enable');
+					StopBtnState('enable');
+					PlayBtnState('enable');
+					PauseBtnState('enable');
+					ForwardBtnState('enable');
+					$('.play').removeClass('glowing');
+					$('.body').removeClass('glowing');
+					$('#brewInCycle').val("FALSE");
+					$('#currentStep').val("0");
+					$('.brewSteps').html("<h3 class='glowing'>Brewing Process Complete</h3>");
+					document.getElementById("brewInCycle").value = "FALSE";
+					endBrewingTimeout = setTimeout(function(){$('.brewSteps').html("");}, 10000);
+
+				});
+				
+				socket.on("countDownTimer", function (time){
+					$('.countDownTimer').text(time);
+				});
+
+				socket.on('newBrewStep', function (newBrewStep, data) {
+					console.log('New Brew Step');
+					console.log(newBrewStep);
+					stepData = data;
+					document.getElementById("brewInCycle").value = "TRUE";
+					if(data.id != previousStep || data.id == 1){
+						var thisStepClass = "Step-"+parseInt(data.id,10);
+						previousStep = parseInt(data.id,10);
+						document.getElementById("currentStep").value = parseInt(data.id,10);
+						
+						var brewStep = $('<div class="'+thisStepClass+' flip-container node"></div>').prependTo('#brewSteps');
+			        		$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Step '+data.id+': '+newBrewStep+'<span class="pull-right"><i class="glyphicon glyphicon-chevron-up"></i></span></a></p>').appendTo(brewStep);
+			        		$('<div id="Step-'+data.id+'" class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block flip-panel" style="white-space:normal"></div>').appendTo(brewStep);
+			        		if(data.info !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Info: '+data.info+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.step !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Action: '+data.step+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.id !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Step: '+data.id+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.process !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Process: '+data.process+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.clock !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Clock: '+data.clock+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.temp !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic"Temperature: >'+data.temp+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.equip !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Equipment: '+data.equip+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.amount !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Amount: '+data.amount+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.ack !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Ack: '+data.ack+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.stepnum !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Step Number: '+data.stepnum+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.wait !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Wait for: '+data.wait+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.begin_time !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">Begin Time: '+data.begin_time+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+			        		if(data.end_time !=""){
+								$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block rel="popover" style="white-space:normal" data-title="Dynamic">End Time: '+data.end_time+'</a></p>').appendTo('#Step-'+data.id);
+			        		}
+						evaluateControls();
+						if(parseInt(data.id, 10) > 0){
+							resizeDivs(data.id);
+							playNotification();
+						}
+					}
+				});	
+				
+				function playNotification(){
+					//$( '#audio_notification' )[0].play();
+					if(sound){
+						sound.play()
+					}
+				}
+				
+				function resizeDivs(numSteps){
+					var numStepsToDisplay = 10;
+					var numStepsToResize = 9;
+					var lastStepSize = 'btn-md';
+					var firstStepToResize;
+					var factor = numStepsToResize/numStepsToResize;
+
+					firstStepToResize = numSteps-numStepsToDisplay+numStepsToResize;
+					if(firstStepToResize < 1){firstStepToResize = 1;}
+					
+					$("div[class^='Step-']").find('a').removeClass(lastStepSize).addClass("btn-xs");
+					$('.Step-'+numSteps).find('a:first').removeClass("btn-xs").addClass(lastStepSize);
+					for(var i = numSteps; i >= 1; i--){
+						if(i != numSteps){
+							$('.Step-'+i).find("a:first").css('color', '#999');
+							$('.Step-'+i).find("a:first").fadeTo( "fast" , factor, function() { });
+						}	
+						if(i <= firstStepToResize){
+							factor = (numStepsToResize-(firstStepToResize-i))/numStepsToResize;
+							$('.Step-'+i).find("a:first").css('font-size', factor*12+'px');
+						}
+						if(i < numSteps-numStepsToDisplay){
+							$('.Step-'+i).find("a:first").css('display', 'none');
+						}
+					}
+				}
+				
+				socket.on('recipe', function (recipeJSON) {
+					clearRecipes();
+					recipeData = recipeJSON;
+					if(recipeJSON.MASHS == undefined){
+						if(recipeJSON.MASH == undefined){
+							$('.missingMashProfiles').modal('show');
+						} else if(recipeJSON.MASH[0].MASH_STEPS == undefined){
+							if(recipeJSON.MASH[0].MASH_STEP == undefined){
+								$('.missingMashProfiles').modal('show');
+							}
+						}
+					} else if(recipeJSON.MASHS[0].MASH == undefined){
+						$('.missingMashProfiles').modal('show');
+					} else if(recipeJSON.MASHS[0].MASH[0].MASH_STEPS == undefined){
+						if(recipeJSON.MASHS[0].MASH[0].MASH_STEP == undefined){
+							$('.missingMashProfiles').modal('show');
+						}
+					}
+					
+					function addEquipToSelectList(equipments, equipName, index){
+						[].slice.call( equipments ).forEach(function ( equipment ) {
+							$(equipment).append($('<option>', {
+					    		value: 'EQUIPMENTS[0].EQUIPMENT['+index+']',
+					    		text: equipName
+							}));
+							var data = {
+								name: equipName,
+								equip: 'EQUIPMENTS[0].EQUIPMENT['+index+']'
+							};
+							writeSocket("equipmentName", data);
+						});
+					}
+					function createRecipeContainers(parentID, condainerID, labelName){
+	        			var scheduleDiv = $('<div class="flip-container node"></div>').appendTo(parentID);
+		        		$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">'+labelName+'<span class="pull-right"><i class="glyphicon glyphicon-chevron-up"></i></span></a></p>').appendTo(scheduleDiv);
+		        		$('<div id='+condainerID+' class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block flip-panel" style="white-space:normal"></div>').appendTo(scheduleDiv);
+					}
+					createRecipeContainers("#mash-schedule", "main-mash-schedule", "MASH");
+					createRecipeContainers("#boil-schedule", "main-boil-schedule", "BOIL");
+					createRecipeContainers("#main-boil-schedule", "main-first-wort-schedule", "FIRST WORT");
+					createRecipeContainers("#main-boil-schedule", "main-aroma-schedule", "AROMA");
+					createRecipeContainers("#pitch-schedule", "main-pitch-schedule", "PITCH");
+					createRecipeContainers("#secondary-schedule", "main-secondary-schedule", "SECONDARY");
+					hideRecipeContainers();
+					
+					$('#selectChartHeater').find('option').remove();
+					$('#selectChartHeater').append($('<option>', {
+						selected: "selected",
+			    		value: "1",
+			    		text: "Heater Port 1"
+					}));
+					$('#selectChartHeater').append($('<option>', {
+			    		value: "2",
+			    		text: "Heater Port 2"
+					}));
+					$('#selectChartHeater').append($('<option>', {
+			    		value: "3",
+			    		text: "Heater Port 3"
+					}));
+
+					$('#selectChartSensor').find('option').remove();
+					$('#selectChartSensor').append($('<option>', {
+						selected: "selected",
+			    		value: "1",
+			    		text: "Sensor Port 1"
+					}));
+					$('#selectChartSensor').append($('<option>', {
+			    		value: "2",
+			    		text: "Sensor Port 2"
+					}));
+					$('#selectChartSensor').append($('<option>', {
+			    		value: "3",
+			    		text: "Sensor Port 3"
+					}));
+					
+					var str = JSON.parse(beerXMLmap);
+			        parseRecipe(recipeJSON, "recipeJSON", str);
+					var equipments = document.getElementsByClassName('equip-assign');
+					[].slice.call( equipments ).forEach(function ( equipment ) {
+						$(equipment).find('option').remove();
+						//$(equipment).append($('<option>', {
+						//	selected: "selected",
+				    	//	value: "none",
+				    	//	text: "none"
+						//}));
+					});
+			        try{
+			        	for(var i in recipeJSON.EQUIPMENTS[0].EQUIPMENT){
+			        		$('.hideChart').show();
+			        		var equipName = recipeJSON.EQUIPMENTS[0].EQUIPMENT[i].NAME[0];
+			        		document.getElementById("chart"+i+"name").innerHTML = equipName;
+			        		addEquipToSelectList(equipments, equipName, i);
+						} 
+						if(recipeJSON.EQUIPMENTS[0].EQUIPMENT.length < 3){
+							for(var j = 3; j > recipeJSON.EQUIPMENTS[0].EQUIPMENT.length; j--){
+				        		document.getElementById("chart"+(+j-1)+"name").innerHTML = "Pot "+j;
+				        		addEquipToSelectList(equipments, "Pot "+j, +j-1);
+							}
+						}
+			        } catch(err) {
+			        	try{
+			        		equipName = recipeJSON.EQUIPMENT[0].NAME[0];
+			        		document.getElementById("chart0name").innerHTML = equipName;
+			        		addEquipToSelectList(equipments, equipName, 0);
+			        		$('.hideChart').hide();
+							for(j = 3; j > 1; j--){
+				        		document.getElementById("chart"+(+j-1)+"name").innerHTML = "Pot "+j;
+				        		addEquipToSelectList(equipments, "Pot "+j, +j-1);
+							}
+			        	} catch(err) {
+			        		document.getElementById("chart0name").innerHTML = "Pot 1";
+			        		addEquipToSelectList(equipments, "Pot 1", 0);
+			        		$('.hideChart').show();
+			        		document.getElementById("chart1name").innerHTML = "Pot 2";
+			        		addEquipToSelectList(equipments, "Pot 2", 1);
+			        		document.getElementById("chart2name").innerHTML = "Pot 3";
+			        		addEquipToSelectList(equipments, "Pot 3", 2);
+			        	}
+			        }
+					//==============================================================================   	
+			    	//recipe parser============================================================
+					//============================================================================== 
+					function parseRecipe(obj, parent, BeerXMLInfo, scheduleStep) {
+						Object.byString = function(o, s) {
+						    s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+						    s = s.replace(/^\./, '');           // strip a leading dot
+						    var a = s.split('.');
+						    for (var i = 0, n = a.length; i < n; ++i) {
+						        var k = a[i];
+						        if (k in o) {
+						            o = o[k];
+						        } else {
+						            return;
+						        }
+						    }
+						    return o;
+						};	
+
+						function childRecipeContainer(parentID, condainerID, labelName, Key, appendBefore, specialClass){
+							if(specialClass == undefined){
+								specialClass = "";
+							}
+							if(appendBefore != null){
+								switch(Key) {
+									case "MASH":
+									case "WATER":
+										var scheduleDiv = $('<div class="flip-container node '+Key+' '+specialClass+'"></div>');
+										try{
+											var firstChild = document.getElementById(parentID).firstChild.className;
+											$(document.getElementsByClassName(firstChild)[0]).before(scheduleDiv);
+											break;
+										}
+										catch(err){
+											scheduleDiv = $('<div class="flip-container node '+Key+' '+specialClass+'"></div>').appendTo(jq(parentID));
+											break;
+										}
+									default: break;
+								}
+							} else {
+								scheduleDiv = $('<div class="flip-container node '+Key+' '+specialClass+'"></div>').appendTo(jq(parentID));
+							}
+							$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">'+labelName+'<span class="pull-right"><i class="glyphicon glyphicon-chevron-up"></i></span></a></p>').appendTo(scheduleDiv);
+							$('<div id='+condainerID+' class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block flip-panel" style="white-space:normal"></div>').appendTo(scheduleDiv);
+						}
+						
+						function addItem(parentID, itemID, key, nodeDescription, buttonLabel, units, unitType) {
+				        	$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block units-'+units+' '+unitType+'" id='+itemID+' rel="popover" style="white-space:normal" data-title="Dynamic" data-name='+key+' data-content="'+nodeDescription+'" >'+buttonLabel+'</a></p>').appendTo(jq(parentID));
+						}
+						
+    					$(document).ready(function(){
+							for(var key in obj){
+								if(typeof(obj[key])[0] === 'object'){
+						        	for(var ea = 0; ea < obj[key].length; ea++){
+						        		var divLabel = key;
+						        		var dataPath = parent+'.'+key+'['+ea+']';
+					        			try{
+						        			var namePath = (dataPath+'.NAME[0]').replace(/recipeJSON./, "");
+						        			divLabel = Object.byString(recipeJSON, namePath);
+						        			if(!divLabel){
+						        				divLabel = key.replace(/_/g, " ");
+						        			}
+						        			else {
+						        				divLabel = (key+": "+divLabel).replace(/_/g, " ");
+						        			}
+					        			}
+					        			catch(err){}
+										switch(key) {  // add the step to the schedule
+										    case "MASH":
+										    	var appendBefore = divLabel.match("(.*):")[1];
+										    	childRecipeContainer("main-mash-schedule", "schedule-"+dataPath, divLabel.replace(/_/g, " "), key, appendBefore);
+										        scheduleStep = "schedule-"+dataPath;
+										        appendBefore == false;
+										        break;
+										    case "MASH_STEP":
+										    	childRecipeContainer("schedule-"+(parent.replace(/.MASH_STEPS\[0\]/g, "")), "schedule-"+dataPath, divLabel, key);
+										        break;
+										    case "MISC":
+										    	var use = (obj[key][ea].USE[0]);
+										    	try{
+											    	if((obj[key][ea].TYPE[0]) == "Water Agent"){
+											    		var specialClass = 'waterAgent';
+											    		childRecipeContainer("main-"+use.toLowerCase()+"-schedule", "schedule-"+dataPath, use.toUpperCase()+'-'+divLabel, key, appendBefore, specialClass);
+											    	} else {
+											    		childRecipeContainer("main-"+use.toLowerCase()+"-schedule", "schedule-"+dataPath, use.toUpperCase()+'-'+divLabel, key);
+											    	}
+										    	}catch(err){}
+										        break;
+										    case "YEAST":
+										    	childRecipeContainer("main-pitch-schedule", "schedule-"+dataPath, divLabel, key);
+										        break;
+										    case "WATER":
+										    	appendBefore = divLabel.match("(.*):")[1];
+										    	childRecipeContainer("main-mash-schedule", "schedule-"+dataPath, divLabel.replace(/_/g, " "), key, appendBefore);
+										        scheduleStep = "schedule-"+dataPath;
+										        appendBefore == false;
+										        break;
+										    case "FERMENTABLE":
+										    	childRecipeContainer("main-mash-schedule", "schedule-"+dataPath, divLabel, key);
+										        break;
+										    case "HOP":
+										    	use = (obj[key][ea].USE[0]);
+										    	switch(use) {
+										    		case "Boil":
+												    	childRecipeContainer("main-boil-schedule", "schedule-"+dataPath, divLabel, key);
+												    	break;
+										    		case "Dry Hop":
+												    	childRecipeContainer("main-secondary-schedule", "schedule-"+dataPath, divLabel, key);
+												    	document.getElementById("secondary-schedule").style = "display: block;";
+												    	break;
+										    		case "Mash":
+												    	childRecipeContainer("main-mash-schedule", "schedule-"+dataPath, divLabel, key);
+												    	break;
+										    		case "First Wort":
+												    	childRecipeContainer("main-first-wort-schedule", "schedule-"+dataPath, divLabel, key);
+												    	document.getElementById("first-wort-schedule").style = "display: block;";
+												    	break;
+										    		case "Aroma":
+												    	childRecipeContainer("main-aroma-schedule", "schedule-"+dataPath, divLabel, key);
+												    	document.getElementById("aroma-schedule").style = "display: block;";
+												    	break;
+												    default:
+												        break;
+										    	}
+										    default:
+										        break;
+										}
+						        		//Create the recipe item in the Recipe Tree
+						        		var containerDiv = $('<div class="flip-container node"></div>').appendTo(jq(parent));
+						        		$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">'+divLabel+'<span class="pull-right"><i class="glyphicon glyphicon-chevron-up"></i></span></a></p>').appendTo(containerDiv);
+						        		$('<div id="'+dataPath+'" class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block flip-panel" style="white-space:normal"></div>').appendTo(containerDiv);
+						        		parseRecipe((obj[key])[ea], dataPath, BeerXMLInfo, scheduleStep);
+						        	}
+					        	} else {
+					        		var value = obj[key][0];
+					        		if(value != ""){
+						        		if(!isNaN(value)){
+						        			value = (+value).toString();
+										}
+									}
+									dataPath = parent+'.'+key+'[0]';
+									var xmlPath = dataPath.replace(/recipeJSON./, "");
+									xmlPath = xmlPath.replace(/\[[0|1|2|3|4|5|6|7|8|9]\]/g, '');
+									try{
+										var node = BeerXMLInfo[xmlPath][0];
+										var nodeDescription = node.DESCRIPTION;
+										var units = node.UNITS;
+										var Units = units.replace("°", "");
+										var unitType = "";
+										var amountIsWeight = Object.byString(recipeJSON, (parent+".AMOUNT_IS_WEIGHT[0]").replace(/recipeJSON./, ""));
+						        		var buttonLabel = (key+": "+value+" "+units).replace(/_/g, " ");
+										var type = Object.byString(recipeJSON, (parent+".TYPE[0]").replace(/recipeJSON./, ""));
+									}
+									catch(err){}
+					        		switch(key) {  // add the step to the schedule
+									    case "STEP_TIME":
+									    	unitType = "time";
+									    	addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        break;
+									    case "STEP_TEMP":
+									    	unitType = "temperature";
+									    	addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        break;
+									    case "RAMP_TIME":
+									    	unitType = "time";
+									    	addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        break;
+									    case "INFUSE_AMOUNT":
+									    	unitType = "volume";
+									    	addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        break;
+									    case "INFUSE_TEMP":
+									    	unitType = "temperature";
+									    	addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        break;
+									    case "BOIL_TIME":
+									    	if(parent == "recipeJSON"){
+									    		unitType = "time";
+									    		addItem("main-boil-schedule", "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        	break;
+									    	}
+									    case "BOIL_SIZE":
+									    	if(parent == "recipeJSON"){
+									    		unitType = "volume";
+									    		addItem("main-boil-schedule", "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        	break;
+									    	}
+									    case "AMOUNT":
+									    	if(parent.match(/^.*MISC\[.*$/g)){
+									    		if(amountIsWeight == "TRUE"){
+									    			unitType = "weight";
+									    			Units = "kg";
+									    		} else {
+									    			unitType = "volume";
+									    			Units = "L";
+									    		}
+									    		buttonLabel += Units;
+									    		addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        	break;
+									    	} else if(parent.match(/^.*YEAST\[.*$/g)){
+									    		if(amountIsWeight == "TRUE"){
+									    			unitType = "weight";
+									    			Units = "kg";
+									    		} else {
+									    			unitType = "volume";
+									    			Units = "L";
+									    		}
+									    		buttonLabel += Units;
+									    		addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        	break;
+									    	} else if(parent.match(/^.*FERMENTABLE\[.*$/g)){
+									    		unitType = "weight";
+									    		addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        	break;
+									    	} else if(parent.match(/^.*HOP\[.*$/g)){
+									    		unitType = "weight";
+									    		addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        	break;
+									    	}
+									    case "TIME":
+									    	if(parent.match(/^.*MISC\[.*$/g)){
+									    		unitType = "time";
+										    	if(type == "Water Agent"){
+										    		var recipeButtonLabel = (key+": 0 "+units).replace(/_/g, " ");
+										    	} else {
+													recipeButtonLabel = buttonLabel;
+												}
+									    		addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, recipeButtonLabel, Units, unitType);
+									        	break;
+									    	}
+									    case "MIN_TEMPERATURE":
+									    	if(parent.match(/^.*YEAST\[.*$/g)){
+									    		unitType = "temperature";
+										    	addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        	break;
+									    	}
+									    case "MAX_TEMPERATURE":
+									    	unitType = "temperature";
+									    	if(parent.match(/^.*YEAST\[.*$/g)){
+									    		addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+									        	break;
+									    	}
+									    case "ADD_AFTER_BOIL":
+								    		addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+								        	break;
+									    case "TYPE":
+									    	if(parent.match(/^.*MASH_STEP\[.*$/g)){
+										    	addItem("schedule-"+parent, "schedule-"+dataPath, key, nodeDescription, buttonLabel, Units, unitType);
+										        break;
+									    	}
+									    default:
+									        break;
+									}
+									if(Units=='L'){
+										unitType = 'volume';
+									}
+									if(Units=='kg'){
+										unitType = 'weight';
+									}
+				        			$('body').popover({selector: '[rel=popover]', container: 'body', placement: 'bottom'});
+					        		$('<p><a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block units-'+Units+' '+unitType+'" id='+dataPath+' rel="popover" style="white-space:normal" data-title="Dynamic" data-name='+key+' data-content="'+nodeDescription+'" >'+buttonLabel+'</a></p>').appendTo(jq(parent));
+					        	}
+					        }
+						});
+					}
+					
+					$(".waterAgent").remove().clone(true).appendTo($(".WATER").find("div[ID^='schedule-recipeJSON.WATERS']"));
+					setUserTempUnits(document.getElementById('temperatureType').value);
+					setUserWeightUnits(document.getElementById('weightType').value);
+					setUserVolumeUnits(document.getElementById('volumeType').value);
+					writeSocket('tempUnits',document.getElementById('temperatureType').value); 
+					writeSocket('weightUnits',document.getElementById('weightType').value); 
+					writeSocket('volumeUnits',document.getElementById('volumeType').value);
+					
+					if(SETTINGS.selectEquipMashTemp != 'none' ){
+						$('#selectEquipMashTemp option[value="'+SETTINGS.selectEquipMashTemp+'"]').prop('selected', true);
+						$('#selectEquipMashTemp').change();
+					}
+					if(SETTINGS.selectMashHeater != 'none' ){
+						$('#selectMashHeater option[value="'+SETTINGS.selectMashHeater+'"]').prop('selected', true);
+						$('#selectMashHeater').change();
+					}
+					if(SETTINGS.selectMashSensor != 'none' ){
+						$('#selectMashSensor option[value="'+SETTINGS.selectMashSensor+'"]').prop('selected', true);
+						$('#selectMashSensor').change();
+					}
+					if(SETTINGS.selectEquipMashInfusion != 'none' ){
+						$('#selectEquipMashInfusion option[value="'+SETTINGS.selectEquipMashInfusion+'"]').prop('selected', true);
+						$('#selectEquipMashInfusion').change();
+					}
+					if(SETTINGS.selectInfuseHeater != 'none' ){
+						$('#selectInfuseHeater option[value="'+SETTINGS.selectInfuseHeater+'"]').prop('selected', true);
+						$('#selectInfuseHeater').change();
+					}
+					if(SETTINGS.selectInfuseSensor != 'none' ){
+						$('#selectInfuseSensor option[value="'+SETTINGS.selectInfuseSensor+'"]').prop('selected', true);
+						$('#selectInfuseSensor').change();
+					}
+					if(SETTINGS.selectEquipMashDecoction != 'none' ){
+						$('#selectEquipMashDecoction option[value="'+SETTINGS.selectEquipMashDecoction+'"]').prop('selected', true);
+						$('#selectEquipMashDecoction').change();
+					}
+					if(SETTINGS.selectDecoctionHeater != 'none' ){
+						$('#selectDecoctionHeater option[value="'+SETTINGS.selectDecoctionHeater+'"]').prop('selected', true);
+						$('#selectDecoctionHeater').change();
+					}
+					if(SETTINGS.selectDecoctionSensor != 'none' ){
+						$('#selectDecoctionSensor option[value="'+SETTINGS.selectDecoctionSensor+'"]').prop('selected', true);
+						$('#selectDecoctionSensor').change();
+					}
+					if(SETTINGS.selectEquipBoil != 'none' ){
+						$('#selectEquipBoil option[value="'+SETTINGS.selectEquipBoil+'"]').prop('selected', true);
+						$('#selectEquipBoil').change();
+					}
+					if(SETTINGS.selectBoilHeater != 'none' ){
+						$('#selectBoilHeater option[value="'+SETTINGS.selectBoilHeater+'"]').prop('selected', true);
+						$('#selectBoilHeater').change();
+					}
+					if(SETTINGS.selectBoilSensor != 'none' ){
+						$('#selectBoilSensor option[value="'+SETTINGS.selectBoilSensor+'"]').prop('selected', true);
+						$('#selectBoilSensor').change();
+					}
+
+					document.getElementById('boilTemperature').value = SETTINGS.boilTemperature;
+					writeSocket('boilTemperature',document.getElementById('boilTemperature').value);
+
+					var mashs = document.getElementsByClassName("MASH");
+					var mashProfiles = $("div.MASH").find("a:first");
+					if(mashs.length > 1){
+						if(useMashProfile == null | useMashProfile == 'none'){
+							$('.chooseMashProfile').modal('show')
+								.find('option')
+								.remove();
+							// .modal-content
+							// Add the mash profiles from the recipe to the drop down box to prompt the user for which profile to use.
+							$('#selectMashProfile').append($('<option>', {
+								selected: "selected",
+					    		value: "none",
+					    		text: "No Mash Profile Selected"
+							}));
+						} else {
+							$('.chooseMashProfile').find('option').remove();
+							// .modal-content
+							// Add the mash profiles from the recipe to the drop down box to prompt the user for which profile to use.
+							$('#selectMashProfile').append($('<option>', {
+								selected: "selected",
+					    		value: "none",
+					    		text: "No Mash Profile Selected"
+							}));
+							
+						}
+						for(var k = 0; k < mashProfiles.length; k++){
+							$('#selectMashProfile').append($('<option>', {
+					    		value: k,
+					    		text: $("div.MASH").find("a:first")[k].innerText
+							}));
+						}
+						if(useMashProfile != null && useMashProfile != 'none'){
+							$('#selectMashProfile option[value="'+useMashProfile+'"]').prop('selected', true);
+							$('#selectMashProfile').change();
+							$('#saveMashProfile').click();
+						}
+					} else {
+						processSchedule();
+					}
+					//select the chart used for each process
+					writeSocket('mashProcess',$('#selectEquipMashTemp option:selected').val().match(/EQUIPMENT\[(.*?)\]/)[1]);
+					writeSocket('infusionProcess',$('#selectEquipMashInfusion option:selected').val().match(/EQUIPMENT\[(.*?)\]/)[1]);
+					writeSocket('decoctionProcess',$('#selectEquipMashDecoction option:selected').val().match(/EQUIPMENT\[(.*?)\]/)[1]);
+					writeSocket('boilProcess',$('#selectEquipBoil option:selected').val().match(/EQUIPMENT\[(.*?)\]/)[1]);
+					//Update the name of each chart
+					writeSocket('chart0name',document.getElementById("chart0name").innerText);
+					writeSocket('chart1name',document.getElementById("chart1name").innerText);
+					writeSocket('chart2name',document.getElementById("chart2name").innerText);
+					//Update the temperature probe to use for each piece of equipment
+					writeSocket('mashSensor',$('#selectMashSensor option:selected').val());
+					writeSocket('infusionSensor',$('#selectInfuseSensor option:selected').val());
+					writeSocket('decoctionSensor',$('#selectDecoctionSensor option:selected').val());
+					writeSocket('boilSensor',$('#selectBoilSensor option:selected').val());
+					//Update the heater to use for each piece of equipment
+					writeSocket('mashHeater',$('#selectMashHeater option:selected').val());
+					writeSocket('infusionHeater',$('#selectInfuseHeater option:selected').val());
+					writeSocket('decoctionHeater',$('#selectDecoctionHeater option:selected').val());
+					writeSocket('boilHeater',$('#selectBoilHeater option:selected').val());
+					
+					//==============================================================================   	
+			    	// end recipe parser=================================================================
+					//==============================================================================   	
+		    	});
+
+		    	socket.on('timespan', function (timeSpanValue) {
+		        	$('#timeSpanInputBox').val(timeSpanValue);
+		    	});
+		    	
+				socket.on("chartSetPoint", function (chartname, temp){
+					$('#setTempInputBox').val(temp);
+				});
+				
+				socket.on('units', function (units) {
+		        	$('#units').val(units);
+		    	});
+		    	
+				setInterval(function() {
+					if(heartBeatID == lastHeartBeatID && !alreadyNotified) { 
+						$( "<div title='Comms Loss'>Communications with the server has been lost!</div>" ).dialog({
+							buttons: [{
+								text: "Ok",
+								icons: {
+								primary: ""
+								},
+								click: function() {
+								$( this ).dialog( "close" );
+								}
+								// Uncommenting the following line would hide the text,
+								// resulting in the label being used as a tooltip
+								//showText: false
+							}]
+						});
+						alreadyNotified = true;
+					}
+					if(heartBeatID >= 100){
+						heartBeatID = 1;
+					}
+			        writeSocket('heartbeat', heartBeatID);
+			        lastHeartBeatID = heartBeatID;
+				}, 5000);
+				socket.on('heartbeat', function (heartbeatid) {
+					if(heartBeatID+1 == heartbeatid){
+						heartBeatID = heartbeatid;
+						alreadyNotified = false;
+					}	
+				});
+				
+				socket.on('settings', function (data) {
+					$('.chartSettingsModal').modal('show');
+					$('.chart-settings-modal-title').text(data.chart_name + " Settings");
+					$('#selectChartHeater option[value="'+data.heaterID+'"]').prop('selected', true);
+					$('#selectChartHeater').change();
+					$('#selectChartSensor option[value="'+data.sensorID+'"]').prop('selected', true);
+					$('#selectChartSensor').change();
+					$('#chartWatts').val(data.heater_watts);
+					$('#chartPID_P').val(data.heater_p);
+					$('#chartPID_I').val(data.heater_i);
+					$('#chartPID_D').val(data.heater_d);
+				});
+				
+				socket.on('networkStatus', function (networks) {
+					var selectedSSID = $('#selectSSID option:selected').text();
+					console.log("selectedSSID: "+selectedSSID);
+					$('#selectSSID').find('option').remove();
+					for(i=0; i < networks.results.length; i++){
+						if(networks.results[i].ssid != "" && networks.results[i].ssid != null){
+							if(networks.results[i].ssid == selectedSSID){
+								$('#selectSSID').append($('<option>', {
+									selected: 'selected',
+									value: i,
+									text: networks.results[i].ssid								
+								}).attr({
+									'data-bssid': networks.results[i].bssid,
+									'data-frequency': networks.results[i].frequency,
+									'data-signalLevel': networks.results[i].signalLevel,
+									'data-flags': networks.results[i].flags
+								}));
+							} else {
+								$('#selectSSID').append($('<option>', {
+									value: i,
+									text: networks.results[i].ssid								
+								}).attr({
+									'data-bssid': networks.results[i].bssid,
+									'data-frequency': networks.results[i].frequency,
+									'data-signalLevel': networks.results[i].signalLevel,
+									'data-flags': networks.results[i].flags
+								}));
+							}
+						}
+					}
+					if(i == networks.results.length-1){
+						if(wifiPanelVisible() == true) {
+							setTimeout(function(){
+								refreshWifiNetworks();
+							}, 5000);
+						}
+					}
+				});
+
+				socket.on('wifiNotConfigured', function (network) {
+					console.log('wifiNotConfigured');
+					$(".wifiPassphrasePanel").slideDown("slow");
+				});
+				
+				socket.on('wifiConfigData', function (configData) {
+					console.log(configData);
+					for(i=0; i<configData.length; i++){
+						if(configData[i].ssid == $('#selectSSID option:selected').text()){
+							$(".wifiPassphrase").val(configData[i].psk);
+						}
+					}
+				});
+			}
+			
+		    $(document).on('click', '#connectWithPassphrase', function(e){
+				var validation = "false";
+				var ssid = $('#selectSSID option:selected').text();
+				var bssid = $('#selectSSID option:selected').data('bssid');
+				var dhcp = "false";
+				var pass = document.getElementsByClassName('wifiPassphrase')[0].value;
+				var ip = document.getElementsByClassName('wifiIpAddress')[0].value;
+				var subnet = document.getElementsByClassName('wifiSubNet')[0].value;
+				var gateway = document.getElementsByClassName('wifiGateway')[0].value;
+				var encrypted = "true";
+				if($('#wifiConnType option:selected').val() == 0){
+					dhcp = "true";
+				}
+				//if(id.substring(id.length-5, id.length)=='_none'){
+					encrypted = "false";
+				//}
+
+			    var data = {
+					pass: pass,
+					ssid: ssid,
+					bssid: bssid,
+					ip: ip,
+					subnet: subnet,
+					gateway: gateway,
+					dhcp: dhcp,
+					validation: validation,
+					encrypted: encrypted
+				};
+				
+				console.log("connecting with: "+JSON.stringify(data));
+				validateWifiConfig(data, function(validatedData) {
+					console.log("validating data");
+					if (validatedData.validation=="true"){
+						writeSocket("connectToWifi",data);
+					} else {
+						alert("Missing Required Information");
+					}
+				});
+			});
+			
+			
+			
+		    $(document).on('click', '.btn-default', function(e){
+			    var $this = $(this);
+			    for(var i = 0; i < $('.popover').length-1; i++){
+			    	document.getElementsByClassName('popover')[i].remove();
+			    }
+				if($this.hasClass('recipe-node-click')) {
+					$('.recipe-node-clicked').removeClass('recipe-node-clicked').addClass('recipe-node-click');
+					$this.removeClass('recipe-node-click').addClass('recipe-node-clicked');
+				} else {
+					if ($this.hasClass('recipe-node-clicked')) {
+						$this.removeClass('recipe-node-clicked').addClass('recipe-node-click');
+						$this.closest('div').find('.recipe-node-clicked').removeClass('recipe-node-clicked').addClass('recipe-node-click');
+					}
+				}
+			});
+	
+			$(document).keydown(function(e) {
+			    switch(e.which) {
+		        	case 13: // enter
+			        	try{document.getElementById("enterButton").click();}
+			        	catch(err) {}
+			        	try{document.getElementById("timeSpanEnterButton").click();}
+			        	catch(err) {}
+		        		break;
+		
+			        case 37: // left
+			        	break;
+		
+			        case 38: // up
+			        	try{document.getElementById("inputBox").value = Math.round((+document.getElementById("inputBox").value - -0.1)*100)/100;}
+			        	catch(err) {}
+			        	try{document.getElementById("timeSpanInputBox").value = Math.round(+document.getElementById("timeSpanInputBox").value + +15);} 
+			        	catch(err) {}
+			        	break;
+		
+			        case 39: // right
+			    		break;
+		
+			        case 40: // down
+			        	try{document.getElementById("inputBox").value = Math.round((+document.getElementById("inputBox").value - +0.1)*100)/100;}
+			        	catch(err) {}
+			        	try{ document.getElementById("timeSpanInputBox").value = Math.round(+document.getElementById("timeSpanInputBox").value - +15);} 
+			        	catch(err) {}
+			        	break;
+		    		default: return; // exit this handler for other keys
+				}
+				e.preventDefault(); // prevent the default action (scroll / move caret)
+			});
+			
+			getRecipeList();
+
+			$( document ).ready(function() {
+				document.getElementById("selectRecipe").onchange = function(){
+					if(autoOK == false && this.value != 'upload'){
+						useMashProfile = null;
+						var changeRecipe = confirm("Are you sure you want to change the active recipe to " + this.value.slice(0,-4) + "?");
+					} else {
+						changeRecipe = true;
+					}
+					if(changeRecipe){
+						document.getElementById("brewInCycle").value = "FALSE";
+						// writeSocket('End Brewing');
+						switch(this.value) {
+				        	case 'upload': 
+						        $('#recipeJSON').empty();
+					      		clearRecipes();
+					      		hideRecipeContainers();
+					      		$('.upload-panel').slideDown("slow");
+				        		break;
+				        	case 'none': 
+						        $('#recipeJSON').empty();
+					      		clearRecipes();
+					      		hideRecipeContainers();
+					      		writeSocket('recipe', this.value);
+				        		break;
+			        		default:
+						      	if(this.value != 'none' | this.value != 'upload'){
+									document.getElementById("recipeName").value = this.value;
+		        					writeSocket('recipe', this.value);
+									this.type="submit";
+						      	} else {
+		        					writeSocket('mashProfile', 'none');
+						      		document.getElementById("recipeName").value = this.value;
+						      		$('#recipeJSON').empty();
+						      		clearRecipes();
+						      		hideRecipeContainers();
+		        					writeSocket('recipe', this.value);
+						      	}
+						      	$('.upload-panel').slideUp("fast");
+						      	break;
+						}
+					}
+					autoOK = false;
+				};
+				
+				document.getElementById("selectSSID").onchange = function(){
+					var selectedWifi = {
+						ssid: $('#selectSSID option:selected').text(),
+						id: $('#selectSSID option:selected').data('id')
+					};
+					document.getElementById("passphraseInput").value = "";
+					writeSocket('checkWifiConfig', selectedWifi);
+				};
+
+				$('.showHidePassword').click(function() {
+					if($('.showHidePassword').hasClass('glyphicon-eye-open')) {
+						document.getElementById("passphraseInput").type = "text";
+						$('.showHidePassword').removeClass('glyphicon-eye-open').addClass('glyphicon-eye-close');
+					} else {
+						document.getElementById("passphraseInput").type = "password";
+						$('.showHidePassword').removeClass('glyphicon-eye-close').addClass('glyphicon-eye-open');
+					}
+				});
+				
+				document.getElementById("selectMashProfile").onchange = function(){
+			      	if(this.value != "none"){
+						$("#saveMashProfile").prop("disabled",false);
+			      	}
+					document.getElementById("mashName").value = this.value;
+				};
+			    $(function () {
+				    $(document).on('click', '#saveMashProfile', function(e){
+						var numMashs = ($("div.MASH").find("a:first").length)-1;
+						if(useMashProfile != 'none' && useMashProfile != null){
+			    			document.getElementById("mashName").value = useMashProfile;
+				    		useMashProfile = 'none';
+						}
+				    	for(var k = numMashs; k >= 0; k--){
+				    		if(k != +(document.getElementById("mashName").value)){
+					    		document.getElementsByClassName('MASH')[k].remove();
+				    		}
+				    	}
+						writeSocket('mashProfile',document.getElementById("mashName").value);
+						processSchedule();
+				    });
+				});
+				$(function(){
+			        $('.panel').lobiPanel({
+			            //Options go here
+		                reload: false,
+					    close: false,
+					    draggable: true,
+						stateful: true,
+			        });
+					//sortable: true,
+		        });
+				$(function(){
+			        $('.chart').mouseover(function(){
+			            var $this = $(this);
+			            $this.find(".fa.cog").addClass("fa-cog fa-2x");
+			            $this.find(".fa.clock").addClass("fa-clock-o fa-2x");
+			            $this.find(".fa.temp").addClass("fa-thermometer-three-quarters fa-2x");
+			            //$("div.ui-helper-hidden-accessible").remove();
+					});
+				});
+				$(function(){
+			        $('.chart').mouseout(function(){
+			            var $this = $(this);
+			            $this.find(".fa.cog").removeClass("fa-cog fa-2x");
+			            $this.find(".fa.clock").removeClass("fa-clock-o fa-2x");
+			            $this.find(".fa.temp").removeClass("fa-thermometer-three-quarters fa-2x");
+			            //$("div.ui-helper-hidden-accessible").remove();
+			        });
+				});
+			    $(function () {
+				    $(document).on('click', '[class*="recipe-node-click"]', function(e){
+			        	e.stopPropagation();
+			        	e.preventDefault();
+			            var $this = $(this);
+			            var parentClass = $this.closest('div').attr('class');
+			            if(parentClass.includes('flip-container')){
+				            if(parentClass.includes('visible')){
+				            	$this.closest('.flip-container').removeClass("visible");
+				            	$this.closest('div').find('.flip-container').removeClass("visible");
+								$this.closest('div').find('.flip-panel').slideUp("slow");
+								$this.closest('div').find(".glyphicon").removeClass("glyphicon-chevron-down");
+								$this.closest('div').find(".glyphicon").addClass("glyphicon-chevron-up");
+				            } else {
+				            	$this.closest('.flip-container').addClass("visible");
+								$this.closest('div').find('.flip-panel:first').slideDown("slow");
+								$this.find(".glyphicon").removeClass("glyphicon-chevron-up");
+								$this.find(".glyphicon").addClass("glyphicon-chevron-down");
+				            }
+			            }
+	    			});
+			    });
+
+			    $(function () {
+			    	$(".equip-assign").change(function(){
+			            var $this = $(this);
+						writeSocket($this[0].id,$this[0].value); 
+						var value = ($this[0].value).match(/EQUIPMENT\[(.*?)\]/)[1];
+						var chartName = document.getElementById("chart"+value+"name").innerText;
+						switch($this[0].id) {
+							case "selectEquipMashTemp": 
+								writeSocket("mashProcess",value); 
+								writeSocket("chart"+value+"name",chartName); 
+								break;
+							case "selectEquipMashInfusion": 
+								writeSocket("infusionProcess",value); 
+								writeSocket("chart"+value+"name",chartName); 
+								break;
+							case "selectEquipMashDecoction": 
+								writeSocket("decoctionProcess",value); 
+								writeSocket("chart"+value+"name",chartName); 
+								break;
+							case "selectEquipBoil": 
+								writeSocket("boilProcess",value); 
+								writeSocket("chart"+value+"name",chartName); 
+								break;
+							default: break;
+						}
+			    	});
+			    });
+			    
+				document.getElementById("lanConnType").onchange = function(){
+						if(this.value == 1){
+							$(".lanStaticPanel").slideDown("slow");
+						} else {
+							$(".lanStaticPanel").slideUp("slow");
+						}
+				};
+				
+				document.getElementById("wifiConnType").onchange = function(){
+						if(this.value == 1){
+							$(".wifiStaticPanel").slideDown("slow");
+						} else {
+							$(".wifiStaticPanel").slideUp("slow");
+						}
+				};
+				
+				$(function () {
+			    	$(".lanIpAddress").focusout(function(){
+			            var $this = $(this);
+						ValidateLanIPaddress($this[0].value); 
+			    	});
+			    });
+				
+				$(function () {
+			    	$(".lanSubNet").focusout(function(){
+			            var $this = $(this);
+						ValidateLanSubnet($this[0].value); 
+			    	});
+			    });
+
+				$(function () {
+			    	$(".wifiIpAddress").focusout(function(){
+			            var $this = $(this);
+						ValidateWifiIPaddress($this[0].value); 
+			    	});
+			    });
+				
+				$(function () {
+			    	$(".wifiSubNet").focusout(function(){
+			            var $this = $(this);
+						ValidateWifiSubnet($this[0].value); 
+			    	});
+			    });
+				
+				function ValidateLanIPaddress(inputText) {  
+					var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;  
+					if(inputText.match(ipformat)) {  
+						$(".lanIpAddress").removeClass("inputFieldError");  
+						return true;  
+					}  
+						else  
+					{  
+						//alert("You have entered an invalid IP address!");  
+						$(".lanIpAddress").addClass("inputFieldError"); 
+						return false;  
+					}  
+				}  
+				 
+				function ValidateLanSubnet(inputText) {  
+					var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;  
+					if(inputText.match(ipformat)) {  
+						$(".lanSubNet").removeClass("inputFieldError");  
+						return true;  
+					}  
+						else  
+					{  
+						//alert("You have entered an invalid subnet mask!");  
+						$(".lanSubNet").addClass("inputFieldError"); 
+						return false;  
+					}  
+				}  
+				 
+				function ValidateWifiIPaddress(inputText) {  
+					var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;  
+					if(inputText.match(ipformat)) {  
+						$(".wifiIpAddress").removeClass("inputFieldError");  
+						return true;  
+					}  
+						else  
+					{  
+						//alert("You have entered an invalid IP address!");  
+						$(".wifiIpAddress").addClass("inputFieldError"); 
+						return false;  
+					}  
+				}  
+				 
+				function ValidateWifiSubnet(inputText) {  
+					var ipformat = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;  
+					if(inputText.match(ipformat)) {  
+						$(".wifiSubNet").removeClass("inputFieldError");  
+						return true;  
+					}  
+						else  
+					{  
+						//alert("You have entered an invalid subnet mask!");  
+						$(".wifiSubNet").addClass("inputFieldError"); 
+						return false;  
+					}  
+				}  
+				 
+				$(function () {
+			    	$(".equip-assign-heater").change(function(){
+			            var $this = $(this);
+						writeSocket($this[0].id,$this[0].value); 
+						var cmd = "setChart"+$(".currentChartID").val()+"Heater";
+						writeSocket(cmd,$this[0].value); 
+			    	});
+			    });
+			    
+			    $(function () {
+			    	$(".equip-assign-sensor").change(function(){
+			            var $this = $(this);
+						writeSocket($this[0].id,$this[0].value); 
+						var cmd = "setChart"+$(".currentChartID").val()+"Sensor";
+						writeSocket(cmd,$this[0].value); 
+			    	});
+			    });
+			    			    
+			    $(function () {
+			    	$(".equip-assign-watts").change(function(){
+			            var $this = $(this);
+						writeSocket($this[0].id,$this[0].value); 
+						var cmd = "setChart"+$(".currentChartID").val()+"Watts";
+						writeSocket(cmd,$this[0].value); 
+			    	});
+			    });
+			    			    
+			    $(function () {
+			    	$(".equip-assign-p").change(function(){
+			            var $this = $(this);
+						writeSocket($this[0].id,$this[0].value); 
+						var cmd = "setChart"+$(".currentChartID").val()+"P";
+						writeSocket(cmd,$this[0].value); 
+			    	});
+			    });
+			    			    
+			    $(function () {
+			    	$(".equip-assign-i").change(function(){
+			            var $this = $(this);
+						writeSocket($this[0].id,$this[0].value); 
+						var cmd = "setChart"+$(".currentChartID").val()+"I";
+						writeSocket(cmd,$this[0].value); 
+			    	});
+			    });
+			    			    
+			    $(function () {
+			    	$(".equip-assign-d").change(function(){
+			            var $this = $(this);
+						writeSocket($this[0].id,$this[0].value); 
+						var cmd = "setChart"+$(".currentChartID").val()+"D";
+						writeSocket(cmd,$this[0].value); 
+			    	});
+			    });
+			    			    
+			    $(function () {
+			    	$("#boilTemperature").change(function(){
+			            var $this = $(this);
+						writeSocket($this[0].id,$this[0].value); 
+			    	});
+			    });
+				
+				$(document).on('click', '#timeSpanUpButton', function(){
+		    		var curval = document.getElementById('timeSpanInputBox').value;
+		    		var max = document.getElementById('timeSpanInputBox').max;
+		    		var inc = document.getElementById('timeSpanInputBox').step;
+		    		if(+curval <= (+max + -inc) ){
+						document.getElementById('timeSpanInputBox').value = +curval + +inc;
+		    		} else {
+						document.getElementById('timeSpanInputBox').value = max;
+		    		}
+		    	});
+	
+		    	$(document).on('click', '#timeSpanDownButton', function(){
+		    		var curval = document.getElementById('timeSpanInputBox').value;
+		    		var min = document.getElementById('timeSpanInputBox').min;
+		    		var inc = document.getElementById('timeSpanInputBox').step;
+		    		if(+curval >= (+min + +inc) ){
+						document.getElementById('timeSpanInputBox').value = +curval - +inc;
+		    		} else {
+						document.getElementById('timeSpanInputBox').value = min;
+		    		}
+		    	});
+		    	
+				$(document).on('click', '#setTempUpButton', function(){
+		    		var curval = document.getElementById('setTempInputBox').value;
+		    		var max = document.getElementById('setTempInputBox').max;
+		    		var inc = document.getElementById('setTempInputBox').step;
+		    		if(+curval <= (+max + -inc) ){
+						document.getElementById('setTempInputBox').value = +curval + +inc;
+		    		} else {
+						document.getElementById('setTempInputBox').value = max;
+		    		}
+		    	});
+	
+		    	$(document).on('click', '#setTempDownButton', function(){
+		    		var curval = document.getElementById('setTempInputBox').value;
+		    		var min = document.getElementById('setTempInputBox').min;
+		    		var inc = document.getElementById('setTempInputBox').step;
+		    		if(+curval >= (+min + +inc) ){
+						document.getElementById('setTempInputBox').value = +curval - +inc;
+		    		} else {
+						document.getElementById('setTempInputBox').value = min;
+		    		}
+		    	});
+		    	
+		    	$('input[name=unitsRadioBtn]').change(function() {
+					var tempUnits = $('input[name=unitsRadioBtn]:checked').val();
+					document.getElementById('temperature-units').innerHTML = "°"+tempUnits;
+					setUserTempUnits(tempUnits);
+					writeSocket('tempUnits',tempUnits);
+					writeSocket('boilTemperature',document.getElementById('boilTemperature').value);
+		    	});
+
+		    	$('input[name=weightUnitsRadioBtn]').change(function() {
+					var weightUnits = $('input[name=weightUnitsRadioBtn]:checked').val();
+					setUserWeightUnits(weightUnits);
+					writeSocket('weightUnits',weightUnits); 
+		    	});
+
+		    	$('input[name=volumeUnitsRadioBtn]').change(function() {
+					var volumeUnits = $('input[name=volumeUnitsRadioBtn]:checked').val();
+					setUserVolumeUnits(volumeUnits);
+					writeSocket('volumeUnits',volumeUnits); 
+		    	});
+		    	
+				$(document).on('click', '.play', function(){
+					sound = new Audio("audio/Windows Balloon.wav"); 
+					sound.load(); // load the audio data
+					sound.volume=1; // make sure the volume is all the way up, though this doesn't work on iOS
+					if(document.getElementById("brewInCycle").value == "FALSE"){
+						$('.beginBrewing').modal('show');
+						$('.brewSteps').empty();
+						clearTimeout(abortTimeout);
+						clearTimeout(endBrewingTimeout);
+					} else {
+						writeSocket("userAcknowledged", document.getElementById("currentStep").value);
+					}
+		    	});
+		    	
+				$(document).on('click', '.stop', function(){
+					if(document.getElementById("brewInCycle").value == "TRUE"){
+						$('.stopbrewing').modal('show');
+					}
+		    	});
+		    	
+				$(document).on('click', '.step-forward', function(){
+					if(document.getElementById("brewInCycle").value == "TRUE"){
+						writeSocket("step-forward");
+					}
+		    	});
+		    	
+				$(document).on('click', '.step-backward', function(){
+					if(document.getElementById("brewInCycle").value == "TRUE"){
+						writeSocket("step-backward");
+					}
+		    	});
+
+				$(document).on('click', '.pause', function(){
+					if($('#paused').val() == "TRUE"){
+						$('#paused').val("FALSE");
+						$('.countDownTimer').removeClass('glowing');
+						// PlayBtnState('enable');
+						$('.pause').removeClass('glowing');
+						writeSocket("Pause Brewing", false);
+						evaluateControls();
+					} else {
+						$('#paused').val("TRUE");
+						$('.countDownTimer').addClass('glowing');
+						// PlayBtnState('disable');
+						$('.pause').addClass('glowing');
+						writeSocket("Pause Brewing", true);
+						evaluateControls();
+					}
+		    	});
+		    	
+		    	$(function () {
+		    		$('#beginBrewing').click(function(){
+		    			writeSocket("Start Brewing");
+		    			console.log('Brewing Process Started at ' + new Date($.now()));
+		    		});
+		    	});
+		    	
+		    	$(function () {
+		    		$('#stopBrewing').click(function(){
+		    			writeSocket("End Brewing");
+		    			console.log('Brewing Process ended at ' + new Date($.now()));
+		    			document.getElementById("brewInCycle").value = "FALSE";
+		    			$('.countDownTimer').text("00:00:00");
+						BackBtnState('enable');
+						StopBtnState('enable');
+						PlayBtnState('enable');
+						PauseBtnState('enable');
+						ForwardBtnState('enable');
+						$('.pause').removeClass('glowing');
+						$('.play').removeClass('glowing');
+						$('.body').removeClass('glowing');
+						$('.stopbrewing').modal('hide');
+						$('#brewInCycle').val("FALSE");
+						$('#currentStep').val("0");
+						$('.brewSteps').html("<h3 class='glowing'>Brewing Process Aborted</h3>");
+						abortTimeout = setTimeout(function(){$('.brewSteps').html("");}, 10000);		    		
+		    		});
+		    	});
+		    	
+		    	$(function () {
+		    		$('#continueBrewing').click(function(){
+		    			$('.stopbrewing').modal('hide');
+		    		});
+		    	});
+		    			    	
+		    	$(function () {
+		    		$('#resumeBrewing').click(function(){
+		    			document.getElementById("brewInCycle").value = "TRUE";
+		    			$('.resumeBrewing').modal('hide');
+		    			writeSocket("resumeBrewing");
+		    			$('#brewInCycle').val("TRUE");
+		    			$('#currentStep').val(brewState.step.id);
+		    			$('#paused').val((String(brewState.paused)).toUpperCase());
+						sound = new Audio("audio/Windows Balloon.wav"); 
+						sound.load(); // load the audio data
+						sound.volume=1; // make sure the volume is all the way up, though this doesn't work on iOS
+		    		});
+		    	});
+		    	
+		    	$(function () {
+		    		$('#cancelResume').click(function(){
+		    			document.getElementById("brewInCycle").value = "FALSE";
+		    			$('.resumeBrewing').modal('hide');
+		    			writeSocket("End Brewing");
+		    			$('#brewInCycle').val("FALSE");
+		    			$('#currentStep').val(0);
+		    			$('#paused').val("FALSE");
+		    		});
+		    	});
+
+		    	$(function () {
+		    		$('#saveTimeSpan').click(function(){
+		    			$('#timeSpanInputBox').change();
+		    			var timespan = document.getElementById('timeSpanInputBox').value;
+		    			var chart = document.getElementById('adjTimeSpanCtrl').value;
+		    			var timeSpanData = {
+		    				chart: chart,
+		    				timespan: timespan
+		    			};
+		    			writeSocket("saveTimeSpan", timeSpanData);
+		    			$('.timeSpanModal').modal('hide');
+		    		});
+		    	});
+
+		    	$(function () {
+		    		$('#saveTemp').click(function(){
+		    			$('#setTempInputBox').change();
+		    			var temp = document.getElementById('setTempInputBox').value;
+		    			var chart = document.getElementById('adjTempCtrl').value;
+		  				var setTemperature = {
+		  					equipid: chart,
+		  					temp: temp+" "+document.getElementById('temperatureType').value
+		  				};
+		    			writeSocket("setTemperature", setTemperature);
+		    			$('.setTempModal').modal('hide');
+		    		});
+		    	});
+
+		    	$(function () {
+		    		$('.power-btn').click(function(){
+		    			$('.powerOffModal').modal('show');
+		    		});
+		    	});
+
+				$(function () {
+		    		$('#power-off').click(function(){
+		    			$('.powerOffModal').modal('hide');
+						writeSocket('power off');
+		    		});
+		    	});
+				
+				function wifiPanelVisible(callback) {  
+					if($('.wifiPanel').hasClass('visible')) {
+						return callback=true;
+					}
+				};
+				
+				function refreshWifiNetworks() {  
+					writeSocket('SearchWifi');
+				};  
+				
+		    	$(function () {
+		    		$('.wifiPanel').click(function(){
+						refreshWifiNetworks();
+					});
+		    	});
+				 
+		    	$(function () {
+		    		$('.network-btn').click(function(){
+						refreshWifiNetworks();
+		    			$('.networkModal').modal('show')
+							.find('option')
+							.remove();
+						$('#lanConnType').append($('<option>', {
+							selected: "selected",
+							value: "0",
+							text: "DHCP"
+						}));
+						$('#lanConnType').append($('<option>', {
+							value: "1",
+							text: "Static"
+						}));
+						$('#wifiConnType').append($('<option>', {
+							selected: "selected",
+							value: "0",
+							text: "DHCP"
+						}));
+						$('#wifiConnType').append($('<option>', {
+							value: "1",
+							text: "Static"
+						}));
+						$('#selectSSID').append($('<option>', {
+							selected: "selected",
+							value: "0",
+							text: "Searching..."
+						}));
+							
+		    		});
+		    	});
+
+				$(function () {
+		    		$('#power-off').click(function(){
+		    			$('.networkModal').modal('hide');
+						//writeSocket('power off');
+		    		});
+		    	});
+
+				$(document).on('click', '.spanContainer span.clickable.cog', function(){
+			    	var $this = $(this);
+				    var chartname = $this.closest(".chart").find(".chart").attr("id");
+		        	writeSocket('getSettings', chartname.replace(/chart/,""));
+					$('.currentChartID').val(chartname.replace(/chart/,""));
+				});
+			        	
+				$(document).on('click', '.spanContainer span.clickable.clock', function(){
+			    	var $this = $(this);
+				    var chartname = $this.closest(".chart").find(".chart").attr("id");
+		        	writeSocket('getTimeSpan', chartname.replace(/chart/,""));
+		        	var title = $('#'+chartname+'name').text();
+		        	$('.timeSpanModal').modal('show');
+		    		$('.timespan-modal-title').text(title + " - Adjust Chart Time Span");
+		    		$('#adjTimeSpanCtrl').val(chartname.replace(/chart/,""));
+				});
+			        	
+				$(document).on('click', '.spanContainer span.clickable.temp', function(){
+			    	var $this = $(this);
+				    var chartname = $this.closest(".chart").find(".chart").attr("id");
+		        	writeSocket('getTempSetpoint', chartname);
+		        	var title = $('#'+chartname+'name').text();
+		        	$('.setTempModal').modal('show');
+		    		$('.setTempModal-modal-title').text(title + " - Adjust Temperature");
+		    		$('#adjTempCtrl').val(chartname.replace(/chart/,""));
+				});
+				
+				$.getJSON("jsonFiles/settings.json",
+					function( settings ) {
+						SETTINGS = settings;
+						document.getElementById('temperatureType').value = settings.tempUnits;
+						document.getElementById('temperature-units').innerHTML = "°"+settings.tempUnits;
+						document.getElementById('weightType').value = settings.weightUnits;
+						document.getElementById('volumeType').value = settings.volumeUnits;
+						$('input:radio[class=tempUnits][value='+settings.tempUnits+']').prop('checked', true);
+						$('input:radio[class=weightUnits][value='+settings.weightUnits+']').prop('checked', true);
+						$('input:radio[class=volumeUnits][value='+settings.volumeUnits+']').prop('checked', true);
+						if(settings.recipe != 'none'){
+    						autoOK = true;
+							if(settings.mashProfile != 'none' ){
+    							useMashProfile = settings.mashProfile;
+    						} else {
+    							useMashProfile = 'none';
+    						}
+							$('#selectRecipe option[value="'+settings.recipe+'"]').prop('selected', true);
+							$('#selectRecipe').change();
+						}
+					}
+				);
+				writeSocket("checkActiveBrewState");
+			});
+    	} 
+    	catch (err){
+    		console.log(err);
+    	}
+		
+		jQuery(window).load(function(){
+			//jQuery('#overlay').fadeOut();
+			document.getElementById("loaderText").innerHTML = "Synching with controller...";
+		});
+</script>
+</head>
+<body class="body">
+	<style>
+		#overlay {
+			background: #ffffff;
+			color: #666666;
+			position: fixed;
+			height: 100%;
+			width: 100%;
+			z-index: 5000;
+			top: 0;
+			left: 0;
+			float: left;
+			text-align: center;
+			padding-top: 25%;
+		}
+		
+		.loader {
+			border: 16px solid #f3f3f3; /* Light grey */
+			border-top: 16px solid #3498db; /* Blue */
+			border-radius: 50%;
+			width: 120px;
+			height: 120px;
+			margin-left: auto; 
+			margin-right: auto;
+			animation: spin 2s linear infinite;
+		}	
+		
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}	
+	</style>
+	<div id="overlay">
+		<div class="loader"></div>
+		<div id="loaderText">Connecting to Brew Controller...</div>
+	</div>
+	<header>Brew Controller
+		<a class="btn btn-xlg control-btn panel-primary btn-default power-btn pull-right" style="white-space:normal" data-title="Dynamic">
+			<span class="clickable"><i class="glyphicon glyphicon-off btn-xlg"></i></span>
+		</a>
+		<a class="btn btn-xlg control-btn panel-primary btn-default network-btn pull-right" style="white-space:normal" data-title="Dynamic">
+			<span class="clickable"><i class="glyphicon glyphicon-signal btn-xlg"></i></span>
+		</a>
+	</header>
+	<input type="hidden" id="temperatureType" value="C"></input>
+	<input type="hidden" id="weightType" value="kg"></input>
+	<input type="hidden" id="volumeType" value="L"></input>
+	<input type="hidden" id="currentStep"></input>
+	<input type="hidden" id="brewInCycle" value="FALSE"></input>
+	<input type="hidden" id="paused" value="FALSE"></input>
+	<input type="hidden" id="adjTimeSpanCtrl"></input>
+	<input type="hidden" id="adjTempCtrl"></input>
+	<!-- <div class="lobipanel-parent-sortable"> -->
+	<div class="lobipanel-parent">
+		<div class="row">
+			<div class="col-xs-6 col-md-4">
+				<div class="panel panel-default" data-sortable="true" data-inner-id="recipePanel-data-attributes">
+					<div class="panel-heading">
+						<div class="panel-title">Recipe</div>
+					</div>
+					<div class="panel-body">
+						<div class="container" ng-controller="recipeController" style="max-width: 100%">
+							<form class="form-inline" ng-submit="send()" id="recipeform">
+								<input type="hidden" id="recipeName"></input>
+								<span>
+									<select size="1" id="selectRecipe" class="form-control" name="Recipe" style="width:100%"></select>
+								</span>
+							</form>
+							<div class="upload-panel">
+								<div class="panel-body">
+									<div class="progress"  id="progress-div" style="display:none">
+										<div class="progress-bar" role="progressbar"></div>
+									</div>
+									<button class="btn btn-md upload-btn" type="button">
+										<div class="glyphicon glyphicon-cloud-upload"></div> Upload Recipe
+									</button>
+								</div>
+							</div>
+							<input id="upload-input" type="file" name="uploads[]" multiple="multiple"></br>
+							<div id="recipeJSON" class="panel-body recipe-container"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-4">
+				<div class="panel panel-default" data-sortable="true" data-inner-id="chart0Panel-data-attributes">
+					<div class="panel-heading">
+						<div class="panel-title">
+							<div id="chart0name">Pot 0</div>
+						</div>
+					</div>
+					<div class="panel-body chart">
+						<div class="container" style="max-width: 50%; text-align:center">
+							<form ng-submit="send()" id="chart0form">
+								<input type="hidden" id="chart0tableName" ng-model="tableName" value="control0_temp"></input>
+								<input type="hidden" id="chart0setPoint" ng-model="setPoint"></input>
+								<input type="hidden" id="chart0timeSpan" ng-model="timeSpan" value="60" class="charttimeSpan"></input>
+							</form>
+						</div>
+						<div id="chart0" class="chart0 chart" tableName="control0_temp"></div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-80px;">
+							<span class="pull-right clickable clock"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa clock"></i>
+								</a>
+							</span>
+						</div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-45px;">
+							<span class="pull-right clickable temp"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa temp"></i>
+								</a>
+							</span>
+						</div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:0px;">
+							<span class="pull-right clickable cog"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa cog"></i>
+								</a>
+							</span>
+						</div>
+						<script language="javascript" type="text/javascript" src="lib/p5js/createChart.js"></script>
+						<script type="text/javascript">
+							MYLIBRARY.init([0, document.getElementById('chart0').offsetWidth, "chart0"]);
+							MYLIBRARY.createChart();
+						</script>
+					</div>
+					<div id="chart0panel"></div>
+				</div>
+				<div class="panel panel-default" data-sortable="true" data-inner-id="chart1Panel-data-attributes">
+					<div class="panel-heading">
+						<div class="panel-title">
+							<div id="chart1name">Pot 1</div>
+						</div>
+					</div>
+					<div class="panel-body chart">
+						<div class="container" style="max-width: 50%; text-align:center">
+							<form ng-submit="send()" id="chart1form">
+								<input type="hidden" id="chart1tableName" ng-model="tableName" value="control1_temp"></input>
+								<input type="hidden" id="chart1setPoint" ng-model="setPoint"></input>
+								<input type="hidden" id="chart1timeSpan" ng-model="timeSpan" value="60" class="charttimeSpan"></input>
+							</form>
+						</div>
+						<div id="chart1" class="chart1 chart" tableName="control1_temp"></div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-80px;">
+							<span class="pull-right clickable clock"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa clock"></i>
+								</a>
+							</span>
+						</div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-45px;">
+							<span class="pull-right clickable temp"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa temp"></i>
+								</a>
+							</span>
+						</div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:0px;">
+							<span class="pull-right clickable cog"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa cog"></i>
+								</a>
+							</span>
+						</div>
+						<script type="text/javascript">
+							MYLIBRARY.init([1, document.getElementById('chart1').offsetWidth, "chart1"]);
+							MYLIBRARY.createChart();
+						</script>
+					</div>
+					<div id="chart1panel"></div>
+				</div>
+				<div class="panel panel-default" data-sortable="true" data-inner-id="chart2Panel-data-attributes">
+					<div class="panel-heading">
+						<div class="panel-title">
+							<div id="chart2name">Pot 1</div>
+						</div>
+					</div>
+					<div class="panel-body chart">
+						<div class="container" style="max-width: 50%; text-align:center">
+							<form ng-submit="send()" id="chart2form">
+								<input type="hidden" id="chart2tableName" ng-model="tableName" value="control2_temp"></input>
+								<input type="hidden" id="chart2setPoint" ng-model="setPoint"></input>
+								<input type="hidden" id="chart2timeSpan" ng-model="timeSpan" value="60" class="charttimeSpan"></input>
+							</form>
+						</div>
+						<div id="chart2" class="chart2 chart" tableName="control2_temp"></div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-80px;">
+							<span class="pull-right clickable clock"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa clock"></i>
+								</a>
+							</span>
+						</div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-45px;">
+							<span class="pull-right clickable temp"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa temp"></i>
+								</a>
+							</span>
+						</div>
+						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:0px;">
+							<span class="pull-right clickable cog"  onclick="void(0)" style="max-height:0px">
+								<a href="#" class="tip-left clickable">
+									<i class="fa cog"></i>
+								</a>
+							</span>
+						</div>
+						<script type="text/javascript">
+							MYLIBRARY.init([2, document.getElementById('chart2').offsetWidth, "chart2"]);
+							MYLIBRARY.createChart();
+						</script>
+					</div>
+					<div id="chart2panel"></div>
+				</div>
+			</div>
+			<div class="col-xs-6 col-md-4">
+				<div class="panel panel-default" data-sortable="true" data-inner-id="controllerPanel-data-attributes">
+					<div class="panel-heading">
+						<div class="panel-title">Controller
+							<span class="pull-right clickable"><i class="glyphicon glyphicon-chevron-down hideContent"></i></span>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="flip-container node">
+							<div class="btn-group" role="group">
+								<a class="btn btn-lg control-btn panel-primary btn-default step-backward" style="white-space:normal; width:20%" data-title="Dynamic">
+									<span>
+										<i class="glyphicon glyphicon-step-backward"></i>
+									</span>
+								</a>
+								<a class="btn btn-lg control-btn panel-primary btn-default stop" style="white-space:normal; width:20%" data-title="Dynamic">
+									<span>
+										<i class="glyphicon glyphicon-stop"></i>
+									</span>
+								</a>
+								<a class="btn btn-lg control-btn panel-primary btn-default play" style="white-space:normal; width:20%" data-title="Dynamic">
+									<span>
+										<i class="glyphicon glyphicon-play"></i>
+									</span>
+								</a>
+								<a class="btn btn-lg control-btn panel-primary btn-default pause" style="white-space:normal; width:20%" data-title="Dynamic">
+									<span>
+										<i class="glyphicon glyphicon-pause"></i>
+									</span>
+								</a>
+								<a class="btn btn-lg control-btn panel-primary btn-default step-forward" style="white-space:normal; width:20%" data-title="Dynamic">
+									<span>
+										<i class="glyphicon glyphicon-step-forward"></i>
+									</span>
+								</a>
+							</div>				        	
+							<span class="countDownTimer">00:00:00</span>
+							<div class="brewSteps" id="brewSteps"></div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default" data-sortable="true" data-inner-id="schedulePanel-data-attributes">
+					<div class="panel-heading">
+						<div class="panel-title">Brew Schedule</div>
+					</div>
+					<div class="panel-body">
+						<div class="scheduler">
+							<div class="mash-schedule" id="mash-schedule"></div>
+							<div class="first-wort-schedule" id="first-wort-schedule" style="display:none"></div>
+							<div class="boil-schedule" id="boil-schedule"></div>
+							<div class="aroma-schedule" id="aroma-schedule" style="display:none"></div>
+							<div class="measure-og-schedule" id="measure-og-schedule"></div>
+							<div class="pitch-schedule" id="pitch-schedule" style="display:none"></div>
+							<div class="primary-schedule" id="primary-schedule" style="display:none"></div>
+							<div class="secondary-schedule" id="secondary-schedule" style="display:none"></div>
+							<div class="bottling-schedule" id="bottling-schedule" style="display:none"></div>
+						</div>
+					</div>
+				</div>
+				<div class="panel panel-default" data-sortable="true" data-inner-id="settingsPanel-data-attributes">
+					<div class="panel-heading">
+						<div class="panel-title">Settings</div>
+					</div>
+					<div class="panel-body btn-group btn-group-sm" style="width: 100%">
+						<div class="settings">
+							<div class="settings-Container" id="settings-Container">
+								<div class="flip-container node">
+									<p>
+										<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Temperature Units
+											<span class="pull-right">
+												<i class="glyphicon glyphicon-chevron-up"></i>
+											</span>
+										</a>		    					
+									</p>
+									<div id="tempUnits" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+										<p>
+											<div class="radio">
+												<label style="width:100%" class="tempUnitsLabel" ><input class="tempUnits" type="radio" name="unitsRadioBtn" value="C">Celsius</label>
+												<label style="width:100%" class="tempUnitsLabel" ><input class="tempUnits" type="radio" name="unitsRadioBtn" value="F">Fahrenheit</label>
+											</div>
+										</p>
+									</div>
+								</div>
+								<div class="flip-container node">
+									<p>
+										<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Weight Units
+											<span class="pull-right">
+												<i class="glyphicon glyphicon-chevron-up"></i>
+											</span>
+										</a>		    					
+									</p>
+									<div id="weightUnits" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+										<p>
+											<div class="radio">
+												<label style="width:100%"><input class="weightUnits" type="radio" name="weightUnitsRadioBtn" value="kg">Kilograms (kg)</label>
+												<label style="width:100%"><input class="weightUnits" type="radio" name="weightUnitsRadioBtn" value="g">Grams (g)</label>
+												<label style="width:100%"><input class="weightUnits" type="radio" name="weightUnitsRadioBtn" value="mg">Milligrams (mg)</label>
+												<label style="width:100%"><input class="weightUnits" type="radio" name="weightUnitsRadioBtn" value="oz">Ounces (oz)</label>
+												<label style="width:100%"><input class="weightUnits" type="radio" name="weightUnitsRadioBtn" value="lb">Pounds (lb)</label>
+											</div>
+										</p>
+									</div>
+								</div>
+								<div class="flip-container node">
+									<p>
+										<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Volume Units
+											<span class="pull-right">
+												<i class="glyphicon glyphicon-chevron-up"></i>
+											</span>
+										</a>		    					
+									</p>
+									<div id="volumeUnits" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+										<p>
+											<div class="radio">
+												<label style="width:100%"><input class="volumeUnits" type="radio" name="volumeUnitsRadioBtn" value="L">Liters</label>
+												<label style="width:100%"><input class="volumeUnits" type="radio" name="volumeUnitsRadioBtn" value="mL">Milliliters</label>
+												<label style="width:100%"><input class="volumeUnits" type="radio" name="volumeUnitsRadioBtn" value="gal">Gallons</label>
+												<label style="width:100%"><input class="volumeUnits" type="radio" name="volumeUnitsRadioBtn" value="qt">Quarts</label>
+												<label style="width:100%"><input class="volumeUnits" type="radio" name="volumeUnitsRadioBtn" value="oz">Fluid Ounces</label>
+											</div>
+										</p>
+									</div>
+								</div>
+								<div class="flip-container node">
+									<p>
+										<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Equipment
+											<span class="pull-right">
+												<i class="glyphicon glyphicon-chevron-up"></i>
+											</span>
+										</a>		    					
+									</p>
+									<div id="equipAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+										<div class="form-group">
+											<div class="flip-container node">
+												<p>
+													<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Mash Equipment
+														<span class="pull-right">
+															<i class="glyphicon glyphicon-chevron-up"></i>
+														</span>
+													</a>		    					
+												</p>
+												<div id="mashAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+													<form class="form-inline" ng-submit="send()" id="mashEquipAssignForm">
+														<div class="input-group input-group-sm" style="width: 100%">
+															<select size="1" id="selectEquipMashTemp" class="form-control input-sm equip-assign pull-left btn-block vert-align" name="Temperature Mash"></select>
+															<span class="input-group-addon" style="width:50%">Mash Pot</span>
+														</div> 
+														<!-- <input type="hidden" id="equip-mash-temperature" value=""></input> -->
+													</form>
+													<div>&nbsp </div>
+												</div>
+											</div>
+											<div class="flip-container node">
+												<p>
+													<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Infusion Equipment
+														<span class="pull-right">
+															<i class="glyphicon glyphicon-chevron-up"></i>
+														</span>
+													</a>		    					
+												</p>
+												<div id="infuseAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+													<form class="form-inline" ng-submit="send()" id="infuseEquipAssignForm">
+														<div class="input-group input-group-sm" style="width: 100%">
+															<select size="1" id="selectEquipMashInfusion" class="form-control input-sm equip-assign pull-left btn-block vert-align" name="Infusion Mash"></select>
+															<span class="input-group-addon" style="width:50%">Infusion Water Pot</span>
+														</div> 
+													</form>
+													<div>&nbsp </div>
+												</div>
+											</div>
+											<div class="flip-container node">
+												<p>
+													<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Decoction Equipment
+														<span class="pull-right">
+															<i class="glyphicon glyphicon-chevron-up"></i>
+														</span>
+													</a>		    					
+												</p>
+												<div id="decoctionAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+													<form class="form-inline" ng-submit="send()" id="decoctionEquipAssignForm">
+														<div class="input-group input-group-sm" style="width: 100%">
+															<select size="1" id="selectEquipMashDecoction" class="form-control input-sm equip-assign pull-left btn-block vert-align" name="Decoction Mash"></select>
+															<span class="input-group-addon" style="width:50%">Decoction Pot</span>
+														</div> 
+													</form>
+													<div>&nbsp </div>
+												</div>
+											</div>
+											<div class="flip-container node">
+												<p>
+													<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">Boil Equipment
+														<span class="pull-right">
+															<i class="glyphicon glyphicon-chevron-up"></i>
+														</span>
+													</a>		    					
+												</p>
+												<div id="boilAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+													<form class="form-inline" ng-submit="send()" id="boilEquipAssignForm">
+														<div class="input-group input-group-sm" style="width: 100%">
+															<select size="1" id="selectEquipBoil" class="form-control input-sm equip-assign pull-left btn-block vert-align" name="Boil"></select>
+															<span class="input-group-addon" style="width:50%">Boil Pot</span>
+														</div>
+													</form>
+													<div>&nbsp </div>
+												</div>
+											</div>
+											<form class="form-inline" ng-submit="send()" id="boilTemperatureForm">
+												<div class="input-group input-group-sm" style="width: 100%">
+													<input class="form-control input-sm pull-left" style="text-align:center" type="number" step="0.1" min="0.0" max="250.0" id="boilTemperature"></input>
+													<span class="input-group-addon" id="temperature-units" style="width:10%">°F</span>
+													<span class="input-group-addon" style="width:50%">Boil Temperature</span>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<script src="/js/angular.min.js"></script>
+	<script src="/js/jquery-ui.min.js"></script>
+	<script src="/js/jquery.ui.touch-punch.min.js"></script>
+	<script src="/js/lobipanel.js"></script>
+	<script src="/js/upload.js"></script>
+	<!-- <audio id="audio_notification"><source src="audio/Windows Balloon.wav"></source></audio> -->
+
+	<!-- Taken from Bootstrap's documentation -->
+	<div class="chooseMashProfile modal fade">
+	  	<div class="modal-dialog">
+	    	<div class="modal-content">
+		      	<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        	<h4 class="modal-title">Select Mash Profile</h4>
+		      	</div>
+		      	<div class="modal-body">
+					<div class="container" style="max-width: 95%">
+						<form class="form-inline" ng-submit="send()" id="mashform">
+							<input type="hidden" id="mashName" value=""></input>
+							<span>
+								<label>Mash Profile</label>
+								<select size="1" id="selectMashProfile" class="form-control" name="Mash Profile"></select>
+							</span>
+						</form>
+					</div>
+	      		</div>
+		      	<div class="modal-footer">
+		        	<button type="button" id="saveMashProfile" class="btn btn-default" data-dismiss="modal" disabled>Save</button>
+		      	</div>
+    		</div>
+	    	<!-- /.modal-content -->
+	  	</div>
+	  	<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!-- Taken from Bootstrap's documentation -->
+	<div class="beginBrewing modal fade">
+	  	<div class="modal-dialog">
+	    	<div class="modal-content">
+		      	<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        	<h4 class="modal-title">Start Brewing</h4>
+		      	</div>
+		      	<div class="modal-body">
+		      		<div>Your are about to start the brewing process.  Press <b>Yes</b> to start the brewing process, or click <b>Cancel</b> to exit.</div>
+	      		</div>
+		      	<div class="modal-footer">
+		        	<button type="button" id="cancelBrewing" class="btn btn-default" data-dismiss="modal" >Cancel</button>
+		        	<button type="button" id="beginBrewing" class="btn btn-default" data-dismiss="modal" >Yes</button>
+		      	</div>
+    		</div>
+	    	<!-- /.modal-content -->
+	  	</div>
+	  	<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<div class="stopbrewing modal fade">
+	  	<div class="modal-dialog">
+	    	<div class="modal-content">
+		      	<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        	<h4 class="modal-title">Are You Sure?</h4>
+		      	</div>
+		      	<div class="modal-body">
+		      		<div>Are you sure that you want to cancel the brewing process?  Click <b>Stop Brewing</b> to cancel brewing, or <b>Continue Brewing</b> to dismiss this message and resume.</div>
+	      		</div>
+		      	<div class="modal-footer">
+		        	<button type="button" id="stopBrewing" class="btn btn-default" data-dismiss="modal" >Stop Brewing</button>
+		        	<button type="button" id="continueBrewing" class="btn btn-default" data-dismiss="modal" >Continue Brewing</button>
+		      	</div>
+    		</div>
+	    	<!-- /.modal-content -->
+	  	</div>
+	  	<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<div class="resumebrewing modal fade">
+	  	<div class="modal-dialog">
+	    	<div class="modal-content">
+		      	<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        	<h4 class="modal-title">Incomplete Brew Cycle Detected</h4>
+		      	</div>
+		      	<div class="modal-body">
+		      		<div>It appears that a previous brew cycle was not completed, would you like to continue from the last known step?  Click <b>Cancel</b> to cancel brewing, or <b>Resume Brewing</b> to dismiss this message and resume.</div>
+	      		</div>
+		      	<div class="modal-footer">
+		        	<button type="button" id="cancelResume" class="btn btn-default" data-dismiss="modal" >Cancel</button>
+		        	<button type="button" id="resumeBrewing" class="btn btn-default" data-dismiss="modal" >Resume Brewing</button>
+		      	</div>
+    		</div>
+	    	<!-- /.modal-content -->
+	  	</div>
+	  	<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+	<!-- Modal -->
+	<div class="timeSpanModal modal fade" tabindex="-1" role="dialog" aria-labelledby="timeSpanModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="timespan-modal-title" id="myModalLabel">Time Span</h4>
+	      </div>
+	      <div class="modal-body">
+			<!--begin body-->
+			<div>Time Span (Seconds)</div>
+		    <div class="input-group">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" id="timeSpanDownButton" type="button">▼</button>
+		      </span>
+		      <input class="form-control pull-left" style="text-align:center" type="number" step="15" min="30" max="300" id="timeSpanInputBox"></input>
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" id="timeSpanUpButton" type="button">▲</button>
+		      </span>
+		    </div><!-- /input-group -->
+    <!--end body-->
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" id="saveTimeSpan" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="setTempModal modal fade" tabindex="-1" role="dialog" aria-labelledby="setTempModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="setTempModal-modal-title" id="myModalLabel">Temperature</h4>
+	      </div>
+	      <div class="modal-body">
+			<!--begin body-->
+			<div>Set Temp </div>
+		    <div class="input-group">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" id="setTempDownButton" type="button">▼</button>
+		      </span>
+		      <input class="form-control pull-left" style="text-align:center" type="number" step="0.1" min="0" max="300" id="setTempInputBox"></input>
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" id="setTempUpButton" type="button">▲</button>
+		      </span>
+		    </div><!-- /input-group -->
+    <!--end body-->
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	        <button type="button" id="saveTemp" class="btn btn-primary">Save changes</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="missingMashProfiles modal fade" tabindex="-1" role="dialog" aria-labelledby="missingMashProfileModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="missingMashProfile-modal-title" id="myModalLabel">Mash Profile Not Found</h4>
+	      </div>
+	      	<div class="modal-body">
+	      		<div>This recipe does not have any mash steps defined in a mash profile!<br /><br />Without a mash profile, or mash steps, fermentables cannot be added to the brewing process since there aren't any mash steps to define what to do with the fermentables.<br /><br />The recipe will still be loaded, but the mash process will have to be performed manually prior to starting the brewing process.</div>
+      		</div>
+	      	<div class="modal-footer">
+	        	<button type="button" id="ackNoMashProfile" class="btn btn-default" data-dismiss="modal" >Ok</button>
+	      	</div>
+	    </div>
+	  </div>
+	</div>
+	<div class="chartSettingsModal modal fade" tabindex="-1" role="dialog" aria-labelledby="settingsModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="chart-settings-modal-title" id="myModalLabel">Settings</h4>
+	      </div>
+	      <div class="modal-body">
+			<!--begin body-->
+			<form class="form-inline" ng-submit="send()" id="chartHeaterForm">
+				<div class="input-group input-group-sm" style="width: 100%">
+					<select size="1" id="selectChartHeater" class="form-control input-sm equip-assign-heater pull-left btn-block vert-align" name="ChartHeater"></select>
+					<span class="input-group-addon" style="width:50%">Heater</span>
+				</div> 
+			</form>
+			<form class="form-inline" ng-submit="send()" id="chartHeaterWattsForm">
+				<div class="input-group input-group-sm" style="width: 100%">
+					<input class="form-control input-sm pull-left equip-assign-watts" style="text-align:center" type="number" step="1" min="1000" max="10000" id="chartWatts"></input>
+					<span class="input-group-addon" style="width:50%">Heater Watts</span>
+				</div>
+			</form>
+			<form class="form-inline" ng-submit="send()" id="chartSensorForm">
+				<div class="input-group input-group-sm" style="width: 100%">
+					<select size="1" id="selectChartSensor" class="form-control input-sm equip-assign-sensor pull-left btn-block vert-align" name="ChartSensor"></select>
+					<span class="input-group-addon" style="width:50%">Temp. Sensor</span>
+				</div> 
+			</form>
+			<form class="form-inline" ng-submit="send()" id="chartPID_PForm">
+				<div class="input-group input-group-sm" style="width: 100%">
+					<input class="form-control input-sm pull-left equip-assign-p" style="text-align:center" type="number" step="1" min="0" id="chartPID_P"></input>
+					<span class="input-group-addon" style="width:50%">PID: P</span>
+				</div>
+			</form>
+			<form class="form-inline" ng-submit="send()" id="chartPID_IForm">
+				<div class="input-group input-group-sm" style="width: 100%">
+					<input class="form-control input-sm pull-left equip-assign-i" style="text-align:center" type="number" step="1" min="0"id="chartPID_I"></input>
+					<span class="input-group-addon" style="width:50%">PID: I</span>
+				</div>
+			</form>
+			<form class="form-inline" ng-submit="send()" id="chartPID_DForm">
+				<div class="input-group input-group-sm" style="width: 100%">
+					<input class="form-control input-sm pull-left equip-assign-d" style="text-align:center" type="number" step="1" min="0" id="chartPID_D"></input>
+					<span class="input-group-addon" style="width:50%">PID: D</span>
+				</div>
+			</form>
+			<input type="hidden" class="currentChartID">
+			<!--end body-->
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="powerOffModal modal fade">
+	  	<div class="modal-dialog">
+	    	<div class="modal-content">
+		      	<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        	<h4 class="modal-title">Shut Down</h4>
+		      	</div>
+		      	<div class="modal-body">
+		      		<div>Are you sure you want to shut down the Brew Controller?</div>
+	      		</div>
+		      	<div class="modal-footer">
+		        	<button type="button" id="cancelShutdown" class="btn btn-default" data-dismiss="modal" >Cancel</button>
+		        	<button type="button" id="power-off" class="btn btn-default" data-dismiss="modal" >Shut Down</button>
+		      	</div>
+    		</div>
+	    	<!-- /.modal-content -->
+	  	</div>
+	  	<!-- /.modal-dialog -->
+	</div>
+	<div class="networkModal modal fade">
+	  	<div class="modal-dialog">
+	    	<div class="modal-content">
+		      	<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        	<h4 class="modal-title">Network Configuration</h4>
+		      	</div>
+		      	<div class="modal-body">
+											<div class="flip-container node">
+												<p>
+													<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">LAN
+														<span class="pull-right">
+															<i class="glyphicon glyphicon-chevron-up"></i>
+														</span>
+													</a>		    					
+												</p>
+												<div id="lanAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls"  style="white-space:normal; display:none">
+													<form class="form-inline" ng-submit="send()" id="lanConfigForm">
+														<div class="input-group input-group-sm" style="width: 100%">
+															<select size="1" id="lanConnType" class="form-control input-sm pull-left btn-block vert-align" name="Lan Connection Type"></select>
+															<span class="input-group-addon" style="width:50%">LAN Connection Type</span>
+														</div> 
+														<div class="flip-container node lanStaticPanel" style="display:none">
+															<div id="lanStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
+																<div class="input-group input-group-sm" style="width: 100%">
+																	<input class="form-control input-sm pull-left btn-block vert-align lanIpAddress" size="1" type='text'/>
+																	<span class="input-group-addon" style="width:50%">IP Address</span>
+																</div> 
+																<div class="input-group input-group-sm" style="width: 100%">
+																	<input class="form-control input-sm pull-left btn-block vert-align lanSubNet" size="1" type='text'/>
+																	<span class="input-group-addon" style="width:50%">Subnet Mask</span>
+																</div> 
+																<div>&nbsp </div>
+															</div>
+														</div>
+													</form>
+													<div>&nbsp </div>
+												</div>
+											</div>
+											<div class="flip-container node wifiPanel">
+												<p>
+													<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">WIFI
+														<span class="pull-right">
+															<i class="glyphicon glyphicon-chevron-up"></i>
+														</span>
+													</a>		    					
+												</p>
+												<div id="wifiAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+													<form class="form-inline" ng-submit="send()" id="wifiConfigForm">
+														<div class="input-group input-group-sm" style="width: 100%">
+															<select size="1" id="selectSSID" class="form-control input-sm pull-left btn-block vert-align" name="WIFI SSID"></select>
+															<span class="input-group-addon" style="width:50%">WIFI SSID</span>
+														</div> 
+														<div class="flip-container node wifiPassphrasePanel" >
+															<div id="lanStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
+																<div class="input-group input-group-sm" style="width: 100%">
+																	<input class="form-control input-sm pull-left btn-block vert-align wifiPassphrase" size="1" style="text-align:center" type="password" id="passphraseInput"></input>
+																	<span class="input-group-addon" style="width:50%">
+																		<a class="pull-left" style="white-space:normal" data-title="Dynamic">
+																			<span>
+																				<i id="" class="showHidePassword clickable glyphicon glyphicon glyphicon-eye-open"></i>
+																			</span>
+																		</a>Passphrase
+																	</span>
+																</div>
+																<div class="input-group input-group-sm" style="width: 100%">
+																	<select size="1" id="wifiConnType" class="form-control input-sm pull-left btn-block vert-align" name="WIFI Connection Type"></select>
+																	<span class="input-group-addon" style="width:50%">WIFI Connection Type</span>
+																</div> 
+																<div class="flip-container node wifiStaticPanel" style="display:none">
+																	<div id="wifiStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
+																		<div class="input-group input-group-sm" style="width: 100%">
+																			<input class="form-control input-sm pull-left btn-block vert-align wifiIpAddress" size="1" type='text'/>
+																			<span class="input-group-addon" style="width:50%">IP Address</span>
+																		</div> 
+																		<div class="input-group input-group-sm" style="width: 100%">
+																			<input class="form-control input-sm pull-left btn-block vert-align wifiSubNet" size="1" type='text'/>
+																			<span class="input-group-addon" style="width:50%">Subnet Mask</span>
+																		</div> 
+																		<div class="input-group input-group-sm" style="width: 100%">
+																			<input class="form-control input-sm pull-left btn-block vert-align wifiGateway" size="1" type='text'/>
+																			<span class="input-group-addon" style="width:50%">Gateway</span>
+																		</div> 
+																		<div>&nbsp </div>
+																	</div>
+																</div>
+																<div>
+																	<button type="button" id="connectWithPassphrase" class="btn btn-default pull-right">Connect</button>
+																</div> 
+
+																<div>&nbsp </div>
+															</div>
+														</div>
+													</form>
+													<div>&nbsp </div>
+												</div>
+											</div>
+	      		</div>
+		      	<div class="modal-footer">
+		        	<button type="button" id="cancelShutdown" class="btn btn-default" data-dismiss="modal" >Done</button>
+		      	</div>
+    		</div>
+	    	<!-- /.modal-content -->
+	  	</div>
+	  	<!-- /.modal-dialog -->
+	</div>
+</body>
+</html>

@@ -1,0 +1,4196 @@
+{
+  "ABV": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "",
+      "DESCRIPTION": "Actual alcohol by volume calculated from the OG and FG measured.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "ACTUAL_EFFICIENCY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "",
+      "DESCRIPTION": "The actual efficiency as calculated using the measured original and final gravity.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "AGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Time (days)",
+      "UNITS": "days",
+      "DESCRIPTION": "The time to age the beer in days after bottling.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "AGE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature C",
+      "UNITS": "°C",
+      "DESCRIPTION": "Temperature for aging the beer after bottling.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "ASST_BREWER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Optional name of the assistant brewer",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "BATCH_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Target size of the finished batch in liters.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "BOIL_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Starting size for the main boil of the wort in liters.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "BOIL_TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time in minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The total time to boil the wort in minutes.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "BREWER": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the brewer",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "CALORIES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Calorie estimate based on the measured starting and ending gravity.  Note that calories should be quoted in 'Cal' or kilocalories which is the normal dietary measure (i.e. a beer is usually in the range of 100-250 calories per 12 oz).  Examples '180 Cal/pint',",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "CARBONATION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volumes of CO2",
+      "UNITS": "",
+      "DESCRIPTION": "Floating point value corresponding to the target volumes of CO2 used to carbonate this beer.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "CARBONATION_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (degrees C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The temperature for either bottling or forced carbonation.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "CARBONATION_USED": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Text description of the carbonation used such as '50g corn sugar' or 'Kegged at 20psi'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DATE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Date brewed in a easily recognizable format such as “3 Dec 04”.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_AGE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Temperature to use when aging the beer in user units such as '55 F'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_BATCH_SIZE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Batch size in user defined units along with the units as in '5.0 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_BOIL_SIZE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Boil size with user defined units as in '6.3 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_CARB_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Carbonation/Bottling temperature in appropriate units such as '40F' or '32 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_FG": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Measured final gravity in user defined units as in '1.035 sg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_OG": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Measured original gravity in user defined units as in '6.4 plato'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_PRIMARY_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Primary fermentation temperature in user defined units such as '64 F'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_SECONDARY_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Secondary fermentation temperature in user defined units such as '56 F'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "DISPLAY_TERTIARY_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Tertiary temperature in user defined units such as '20 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EFFICIENCY": [
+    {
+      "REQUIRED": "Conditional",
+      "FORMAT": "Percentage",
+      "UNITS": "%",
+      "DESCRIPTION": "The percent brewhouse efficiency to be used for estimating the starting gravity of the beer.   Not required for “Extract” recipes, but is required for “Partial Mash” and “All Grain” recipes.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Equipment Record",
+      "UNITS": "",
+      "DESCRIPTION": "An equipment record is optional.  If included the BATCH_SIZE and BOIL_SIZE in the equipment record must match the values in this recipe record.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Equipment Record",
+      "UNITS": "",
+      "DESCRIPTION": "An individual EQUIPMENT record",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a EQUIPMENT record -- any of the below tags may be included in any order within the <EQUIPMENT>…. </EQUIPMENT> record tags.  Any non-standard tags in the equipment will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.BATCH_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The target volume of the batch at the start of fermentation.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.BOIL_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The pre-boil volume used in this particular instance for this equipment setup.  Note that this may be a calculated value depending on the CALC_BOIL_VOLUME parameter.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.BOIL_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Normal boil time",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The normal amount of time one boils for this equipment setup.  This can be used with the evaporation rate to calculate the evaporation loss.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.CALC_BOIL_VOLUME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "Flag denoting that the program should calculate the boil size.  Flag may be TRUE or FALSE.  If TRUE, then BOIL_SIZE = (BATCH_SIZE – TOP_UP_WATER – TRUB_CHILLER_LOSS) * (1+BOIL_TIME * EVAP_RATE )  If set then the boil size should match this value.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.DISPLAY_BATCH_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The target volume of the batch at the start of fermentation in display volume units such as '5.0 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.DISPLAY_BOIL_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The pre-boil volume normally used for a batch of this size shown in display volume units such as '5.5 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.DISPLAY_LAUTER_DEADSPACE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount lost to the lauter tun and equipment associated with the lautering process. Ex: '2.0 gal' or '1.0 l'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.DISPLAY_TOP_UP_KETTLE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount normally added to the boil kettle before the boil. Ex: '1.0 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.DISPLAY_TOP_UP_WATER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of top up water normally added just prior to starting fermentation in display volume such as '1.0 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.DISPLAY_TRUB_CHILLER_LOSS": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of wort normally lost during transition from the boiler to the fermentation vessel.  Includes both unusable wort due to trub and wort lost to the chiller and transfer systems.  Expressed in user units - Ex: '1.5 qt'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.DISPLAY_TUN_VOLUME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Volume of the mash tun in display units such as '10.0 gal' or '20.0 l'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.DISPLAY_TUN_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Weight of the mash tun in display units such as '3.0 kg' or '6.0 lb'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.EVAP_RATE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent per hour",
+      "UNITS": "%",
+      "DESCRIPTION": "The percentage of wort lost to evaporation per hour of the boil.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.HOP_UTILIZATION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.LAUTER_DEADSPACE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Amount lost to the lauter tun and equipment associated with the lautering process.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the equipment profile – usually a text description of the brewing setup.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes associated with the equipment.  May be a multiline entry.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.TOP_UP_KETTLE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Amount normally added to the boil kettle before the boil.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.TOP_UP_WATER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The amount of top up water normally added just prior to starting fermentation.  Usually used for extract brewing.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.TRUB_CHILLER_LOSS": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The amount of wort normally lost during transition from the boiler to the fermentation vessel. Includes both unusable wort due to trub and wort lost to the chiller and transfer systems.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.TUN_SPECIFIC_HEAT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Cal/gram-deg C",
+      "UNITS": "",
+      "DESCRIPTION": "The specific heat of the mash tun which is usually a function of the material it is made of.  Typical ranges are 0.1-0.25 for metal and 0.2-0.5 for plastic materials.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.TUN_VOLUME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Volume of the mash tun in liters.  This parameter can be used to calculate if a particular mash and grain profile will fit in the mash tun.  It may also be used for thermal calculations in the case of a partially full mash tun.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.TUN_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Weight (kg)",
+      "UNITS": "kg",
+      "DESCRIPTION": "Weight of the mash tun in kilograms.  Used primarily to calculate the thermal parameters of the mash tun – in conjunction with the volume and specific heat.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENT.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the equipment record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Equipment Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "An equipment record is optional.  If included the BATCH_SIZE and BOIL_SIZE in the equipment record must match the values in this recipe record.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a EQUIPMENT record -- any of the below tags may be included in any order within the <EQUIPMENT>…. </EQUIPMENT> record tags.  Any non-standard tags in the equipment will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.BATCH_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The target volume of the batch at the start of fermentation.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.BOIL_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The pre-boil volume used in this particular instance for this equipment setup.  Note that this may be a calculated value depending on the CALC_BOIL_VOLUME parameter.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.BOIL_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Normal boil time",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The normal amount of time one boils for this equipment setup.  This can be used with the evaporation rate to calculate the evaporation loss.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.CALC_BOIL_VOLUME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "Flag denoting that the program should calculate the boil size.  Flag may be TRUE or FALSE.  If TRUE, then BOIL_SIZE = (BATCH_SIZE – TOP_UP_WATER – TRUB_CHILLER_LOSS) * (1+BOIL_TIME * EVAP_RATE )  If set then the boil size should match this value.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.DISPLAY_BATCH_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The target volume of the batch at the start of fermentation in display volume units such as '5.0 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.DISPLAY_BOIL_SIZE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The pre-boil volume normally used for a batch of this size shown in display volume units such as '5.5 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.DISPLAY_LAUTER_DEADSPACE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount lost to the lauter tun and equipment associated with the lautering process. Ex: '2.0 gal' or '1.0 l'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.DISPLAY_TOP_UP_KETTLE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount normally added to the boil kettle before the boil. Ex: '1.0 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.DISPLAY_TOP_UP_WATER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of top up water normally added just prior to starting fermentation in display volume such as '1.0 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.DISPLAY_TRUB_CHILLER_LOSS": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of wort normally lost during transition from the boiler to the fermentation vessel.  Includes both unusable wort due to trub and wort lost to the chiller and transfer systems.  Expressed in user units - Ex: '1.5 qt'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.DISPLAY_TUN_VOLUME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Volume of the mash tun in display units such as '10.0 gal' or '20.0 l'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.DISPLAY_TUN_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Weight of the mash tun in display units such as '3.0 kg' or '6.0 lb'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.EVAP_RATE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent per hour",
+      "UNITS": "%",
+      "DESCRIPTION": "The percentage of wort lost to evaporation per hour of the boil.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.HOP_UTILIZATION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Large batch hop utilization.  This value should be 100% for batches less than 20 gallons, but may be higher (200% or more) for very large batch equipment.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.LAUTER_DEADSPACE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Amount lost to the lauter tun and equipment associated with the lautering process.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the equipment profile – usually a text description of the brewing setup.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes associated with the equipment.  May be a multiline entry.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.TOP_UP_KETTLE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Amount normally added to the boil kettle before the boil.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.TOP_UP_WATER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The amount of top up water normally added just prior to starting fermentation.  Usually used for extract brewing.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.TRUB_CHILLER_LOSS": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The amount of wort normally lost during transition from the boiler to the fermentation vessel. Includes both unusable wort due to trub and wort lost to the chiller and transfer systems.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.TUN_SPECIFIC_HEAT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Cal/gram-deg C",
+      "UNITS": "",
+      "DESCRIPTION": "The specific heat of the mash tun which is usually a function of the material it is made of.  Typical ranges are 0.1-0.25 for metal and 0.2-0.5 for plastic materials.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.TUN_VOLUME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Volume of the mash tun in liters.  This parameter can be used to calculate if a particular mash and grain profile will fit in the mash tun.  It may also be used for thermal calculations in the case of a partially full mash tun.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.TUN_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Weight (kg)",
+      "UNITS": "kg",
+      "DESCRIPTION": "Weight of the mash tun in kilograms.  Used primarily to calculate the thermal parameters of the mash tun – in conjunction with the volume and specific heat.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EQUIPMENTS.EQUIPMENT.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the equipment record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EST_ABV": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "",
+      "DESCRIPTION": "Estimated percent alcohol by volume for this recipe.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EST_COLOR": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The estimated color of the beer in user defined color units.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EST_FG": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Calculated estimate for the final specific gravity of this recipe along with the units as in '1.015 sg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "EST_OG": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Calculated estimate of the original gravity for this recipe along with the units.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a fermentable ingredient record -- any of the below tags may be included in any order within the <FERMENTABLE>…. </FERMENTABLE> record tags.  Any non-standard tags in the fermentable will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.ADD_AFTER_BOIL": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "May be TRUE if this item is normally added after the boil.  The default value is FALSE since most grains are added during the mash or boil.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Weight (kg)",
+      "UNITS": "kg",
+      "DESCRIPTION": "Weight of the fermentable, extract or sugar in Kilograms.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "FERMENTABLE.COARSE_FINE_DIFF": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Percent difference between the coarse grain yield and fine grain yield.  Only appropriate for a 'Grain' or 'Adjunct' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.COLOR": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "The color of the item in Lovibond Units (SRM for liquid extracts).",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.DIASTATIC_POWER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "The diastatic power of the grain as measured in 'Lintner' units. Only appropriate for a 'Grain' or 'Adjunct' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of fermentables in this record along with the units formatted for easy display in the current user defined units.  For example '1.5 lbs' or '2.1 kg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.DISPLAY_COLOR": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Color in user defined color units along with the unit identified – for example '200L' or '40 ebc'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.IBU_GAL_PER_LB": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "For hopped extracts only - an estimate of the number of IBUs per pound of extract in a gallon of water.  To convert to IBUs we multiply this number by the 'AMOUNT' field (in pounds) and divide by the number of gallons in the batch.  Based on a sixty minute boil.  Only suitable for use with an 'Extract' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.INVENTORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount in inventory for this item along with the units – for example '10.0 lb'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.MAX_IN_BATCH": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "The recommended maximum percentage (by weight) this ingredient should represent in a batch of beer.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.MOISTURE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Percent moisture in the grain.  Only appropriate for a 'Grain' or 'Adjunct' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the fermentable.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Textual noted describing this ingredient and its use.  May be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.ORIGIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Country or place of origin",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.POTENTIAL": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The yield of the fermentable converted to specific gravity units for display.  For example '1.036' or '1.040' might be valid potentials.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.PROTEIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "The percent protein in the grain.  Only appropriate for a 'Grain' or 'Adjunct' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.RECOMMEND_MASH": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "TRUE if it is recommended the grain be mashed, FALSE if it can be steeped.  A value of TRUE is only appropriate for a 'Grain' or 'Adjunct' types.  The default value is FALSE.  Note that this does NOT indicate whether the grain is mashed or not – it is only a recommendation used in recipe formulation.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.SUPPLIER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Supplier of the grain/extract/sugar",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Grain', 'Sugar', 'Extract', 'Dry Extract' or 'Adjunct'.  Extract refers to liquid extract.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Should be set to 1 for this version of the XML standard.  May be a higher number for later versions but all later versions shall be backward compatible.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLE.YIELD": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Percent dry yield (fine grain) for the grain, or the raw yield by weight if this is an extract adjunct or sugar.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Fermentables Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Zero or more FERMENTABLE ingredients may appear between the <FERMENTABLES> … </FERMENTABLES> tags.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a fermentable ingredient record -- any of the below tags may be included in any order within the <FERMENTABLE>…. </FERMENTABLE> record tags.  Any non-standard tags in the fermentable will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.ADD_AFTER_BOIL": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "May be TRUE if this item is normally added after the boil.  The default value is FALSE since most grains are added during the mash or boil.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Weight (kg)",
+      "UNITS": "kg",
+      "DESCRIPTION": "Weight of the fermentable, extract or sugar in Kilograms.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.COARSE_FINE_DIFF": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Percent difference between the coarse grain yield and fine grain yield.  Only appropriate for a 'Grain' or 'Adjunct' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.COLOR": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "The color of the item in Lovibond Units (SRM for liquid extracts).",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.DIASTATIC_POWER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "The diastatic power of the grain as measured in 'Lintner' units. Only appropriate for a 'Grain' or 'Adjunct' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of fermentables in this record along with the units formatted for easy display in the current user defined units.  For example '1.5 lbs' or '2.1 kg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.DISPLAY_COLOR": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Color in user defined color units along with the unit identified – for example '200L' or '40 ebc'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.IBU_GAL_PER_LB": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "For hopped extracts only - an estimate of the number of IBUs per pound of extract in a gallon of water.  To convert to IBUs we multiply this number by the 'AMOUNT' field (in pounds) and divide by the number of gallons in the batch.  Based on a sixty minute boil.  Only suitable for use with an 'Extract' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.INVENTORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount in inventory for this item along with the units – for example '10.0 lb'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.MAX_IN_BATCH": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "The recommended maximum percentage (by weight) this ingredient should represent in a batch of beer.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.MOISTURE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Percent moisture in the grain.  Only appropriate for a 'Grain' or 'Adjunct' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the fermentable.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Textual noted describing this ingredient and its use.  May be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.ORIGIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Country or place of origin",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.POTENTIAL": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The yield of the fermentable converted to specific gravity units for display.  For example '1.036' or '1.040' might be valid potentials.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.PROTEIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "The percent protein in the grain.  Only appropriate for a 'Grain' or 'Adjunct' type, otherwise this value is ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.RECOMMEND_MASH": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "TRUE if it is recommended the grain be mashed, FALSE if it can be steeped.  A value of TRUE is only appropriate for a 'Grain' or 'Adjunct' types.  The default value is FALSE.  Note that this does NOT indicate whether the grain is mashed or not – it is only a recommendation used in recipe formulation.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.SUPPLIER": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Supplier of the grain/extract/sugar",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Grain', 'Sugar', 'Extract', 'Dry Extract' or 'Adjunct'.  Extract refers to liquid extract.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Should be set to 1 for this version of the XML standard.  May be a higher number for later versions but all later versions shall be backward compatible.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTABLES.FERMENTABLE.YIELD": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Percent dry yield (fine grain) for the grain, or the raw yield by weight if this is an extract adjunct or sugar.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FERMENTATION_STAGES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "The number of fermentation stages used – typically a number between one and three",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FG": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The measured final gravity of the finished beer.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "FORCED_CARBONATION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "TRUE if the batch was force carbonated using CO2 pressure, FALSE if the batch was carbonated using a priming agent.  Default is FALSE",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Hops Record",
+      "UNITS": "",
+      "DESCRIPTION": "An individual HOP record",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a hops ingredient record -- any of the below tags may be included in any order within the <HOP>….</HOP> record tags.  Any non-standard tags in the hops will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.ALPHA": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Percentage",
+      "UNITS": "%",
+      "DESCRIPTION": "Percent alpha of hops - for example '5.5' represents 5.5% alpha",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Weight (kg)",
+      "UNITS": "kg",
+      "DESCRIPTION": "Weight in Kilograms of the hops used in the recipe.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.BETA": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percentage",
+      "UNITS": "%",
+      "DESCRIPTION": "Hop beta percentage - for example '4.4' denotes 4.4 % beta",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.CARYOPHYLLENE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Caryophyllene level in percent.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.COHUMULONE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Cohumulone level in percent",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of hops in this record along with the units formatted for easy display in the current user defined units.  For example '100 g' or '1.5 oz'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.DISPLAY_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Time displayed in minutes for all uses except for the dry hop which is in days.  For example '60 min', '3 days'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.FORM": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Pellet', 'Plug' or 'Leaf'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.HSI": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percentage",
+      "UNITS": "%",
+      "DESCRIPTION": "Hop Stability Index - defined as the percentage of hop alpha lost in 6 months of storage",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.HUMULENE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Humulene level in percent.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.INVENTORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount in inventory for this item along with the units – for example '10.0 oz'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.MYRCENE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Myrcene level in percent",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the hops",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Textual notes about the hops, usage, substitutes.  May be a multiline entry.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.ORIGIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Place of origin for the hops",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.SUBSTITUTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Substitutes that can be used for this hops",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time (min)",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The time as measured in minutes.  Meaning is dependent on the “USE” field.  For “Boil” this is the boil time.  For “Mash” this is the mash time.  For “First Wort” this is the boil time.  For “Aroma” this is the steep time.  For “Dry Hop” this is the amount of time to dry hop.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "HOP.TYPE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Bittering', 'Aroma' or 'Both'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.USE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Boil', 'Dry Hop', 'Mash', 'First Wort' or 'Aroma'.  Note that 'Aroma' and 'Dry Hop' do not contribute to the bitterness of the beer while the others do.  Aroma hops are added after the boil and do not contribute substantially to beer bitterness.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOP.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Should be set to 1 for this version of the XML standard.  May be a higher number for later versions but all later versions shall be backward compatible.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Hops Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Zero or more HOP ingredient records may appear between the <HOPS>…</HOPS> tags.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Hops Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Zero or more HOP ingredient records may appear between the <HOPS>…</HOPS> tags.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a hops ingredient record -- any of the below tags may be included in any order within the <HOP>….</HOP> record tags.  Any non-standard tags in the hops will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.ALPHA": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Percentage",
+      "UNITS": "%",
+      "DESCRIPTION": "Percent alpha of hops - for example '5.5' represents 5.5% alpha",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Weight (kg)",
+      "UNITS": "kg",
+      "DESCRIPTION": "Weight in Kilograms of the hops used in the recipe.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.BETA": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percentage",
+      "UNITS": "%",
+      "DESCRIPTION": "Hop beta percentage - for example '4.4' denotes 4.4 % beta",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.CARYOPHYLLENE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Caryophyllene level in percent.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.COHUMULONE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Cohumulone level in percent",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of hops in this record along with the units formatted for easy display in the current user defined units.  For example '100 g' or '1.5 oz'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.DISPLAY_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Time displayed in minutes for all uses except for the dry hop which is in days.  For example '60 min', '3 days'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.FORM": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Pellet', 'Plug' or 'Leaf'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.HSI": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percentage",
+      "UNITS": "%",
+      "DESCRIPTION": "Hop Stability Index - defined as the percentage of hop alpha lost in 6 months of storage",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.HUMULENE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Humulene level in percent.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.INVENTORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount in inventory for this item along with the units – for example '10.0 oz'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.MYRCENE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Myrcene level in percent",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the hops",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Textual notes about the hops, usage, substitutes.  May be a multiline entry.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.ORIGIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Place of origin for the hops",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.SUBSTITUTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Substitutes that can be used for this hops",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time (min)",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The time as measured in minutes.  Meaning is dependent on the “USE” field.  For “Boil” this is the boil time.  For “Mash” this is the mash time.  For “First Wort” this is the boil time.  For “Aroma” this is the steep time.  For “Dry Hop” this is the amount of time to dry hop.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "HOPS.HOP.TYPE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Bittering', 'Aroma' or 'Both'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.USE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Boil', 'Dry Hop', 'Mash', 'First Wort' or 'Aroma'.  Note that 'Aroma' and 'Dry Hop' do not contribute to the bitterness of the beer while the others do.  Aroma hops are added after the boil and do not contribute substantially to beer bitterness.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "HOPS.HOP.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Should be set to 1 for this version of the XML standard.  May be a higher number for later versions but all later versions shall be backward compatible.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "IBU": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "IBUs",
+      "UNITS": "",
+      "DESCRIPTION": "The estimated bitterness level of the beer in IBUs",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "IBU_METHOD": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Rager', 'Tinseth' or 'Garetz' corresponding to the method/equation used to estimate IBUs for this recipe.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "KEG_PRIMING_FACTOR": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating point",
+      "UNITS": "",
+      "DESCRIPTION": "Used to factor in the smaller amount of sugar needed for large containers.  For example, this might be 0.5 for a typical 5 gallon keg since naturally priming a keg requires about 50% as much sugar as priming bottles.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Mash Profile",
+      "UNITS": "",
+      "DESCRIPTION": "A MASH profile record containing one or more MASH_STEPs.  NOTE: No Mash record is needed for “Extract” type brews.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Mash Record",
+      "UNITS": "",
+      "DESCRIPTION": "An individual MASH record",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a MASH profile record.  All items below should appear between the <MASH>..</MASH> elements.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.DISPLAY_GRAIN_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Grain temperature in user display units with the units.  For example: '72 F'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.DISPLAY_SPARGE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Sparge temperature in user defined units.  For example '178 F'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.DISPLAY_TUN_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Tun temperature in user display units.  For example '68 F'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.DISPLAY_TUN_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Tun weight in user defined units – for example '10 lb'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.EQUIP_ADJUST": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "If TRUE, mash infusion and decoction calculations should take into account the temperature effects of the equipment (tun specific heat and tun weight).  If FALSE, the tun is assumed to be pre-heated.  Default is FALSE.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.GRAIN_TEMP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The temperature of the grain before adding it to the mash in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a MASH_STEP record -- any of the below tags may be included in any order within the <MASH_STEP>…. </MASH_STEP> record tags.  Any non-standard tags in the mash step will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.DECOCTION_AMT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Calculated volume of mash to decoct.  Only applicable for a decoction step.  Includes the units as in '7.5 l' or '2.3 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.DESCRIPTION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Textual description of this step such as 'Infuse 4.5 gal of water at 170 F' – may be either generated by the program or input by the user.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.DISPLAY_INFUSE_AMT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Infusion amount along with the volume units as in '20 l' or '13 qt'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.DISPLAY_STEP_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Step temperature in user defined temperature units.  For example '154F' or '68 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.END_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (Celsius)",
+      "UNITS": "°C",
+      "DESCRIPTION": "the temperature you can expect the mash to fall to after a long mash step.  Measured in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEP.INFUSE_AMOUNT": [
+    {
+      "REQUIRED": "Conditional",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The volume of water in liters to infuse in this step.  Required only for infusion steps, though one may also add water for temperature mash steps.  One should not have an infusion amount for decoction steps.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.INFUSE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The calculated infusion temperature based on the current step, grain, and other settings.  Applicable only for an infusion step. Includes the units as in '154 F' or '68 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the mash step – usually descriptive text such as 'Dough In' or 'Conversion'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.RAMP_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "Time in minutes to achieve the desired step temperature – useful particularly for temperature mashes where it may take some time to achieve the step temperature.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEP.STEP_TEMP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The target temperature for this step in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEP.STEP_TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time in Minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The number of minutes to spend at this step – i.e. the amount of time we are to hold this particular step temperature.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEP.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Infusion', 'Temperature' or 'Decoction' depending on the type of step.  Infusion denotes adding hot water, Temperature denotes heating with an outside heat source, and decoction denotes drawing off some mash for boiling.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the mash step record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEP.WATER_GRAIN_RATIO": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The total ratio of water to grain for this step AFTER the infusion along with the units, usually expressed in qt/lb or l/kg.  Note this value must be consistent with the required infusion amount and amounts added in earlier steps and is only relevant as part of a <MASH> profile.  For example '1.5 qt/lb' or '3.0 l/kg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Record set that starts the list of <MASH_STEP> records.  All MASH_STEP records should appear between the <MASH_STEPS> … </MASH_STEPS> pair.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a MASH_STEP record -- any of the below tags may be included in any order within the <MASH_STEP>…. </MASH_STEP> record tags.  Any non-standard tags in the mash step will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.DECOCTION_AMT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Calculated volume of mash to decoct.  Only applicable for a decoction step.  Includes the units as in '7.5 l' or '2.3 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.DESCRIPTION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Textual description of this step such as 'Infuse 4.5 gal of water at 170 F' – may be either generated by the program or input by the user.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.DISPLAY_INFUSE_AMT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Infusion amount along with the volume units as in '20 l' or '13 qt'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.DISPLAY_STEP_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Step temperature in user defined temperature units.  For example '154F' or '68 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.END_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (Celsius)",
+      "UNITS": "°C",
+      "DESCRIPTION": "the temperature you can expect the mash to fall to after a long mash step.  Measured in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.INFUSE_AMOUNT": [
+    {
+      "REQUIRED": "Conditional",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The volume of water in liters to infuse in this step.  Required only for infusion steps, though one may also add water for temperature mash steps.  One should not have an infusion amount for decoction steps.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.INFUSE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The calculated infusion temperature based on the current step, grain, and other settings.  Applicable only for an infusion step. Includes the units as in '154 F' or '68 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the mash step – usually descriptive text such as 'Dough In' or 'Conversion'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.RAMP_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "Time in minutes to achieve the desired step temperature – useful particularly for temperature mashes where it may take some time to achieve the step temperature.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.STEP_TEMP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The target temperature for this step in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.STEP_TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time in Minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The number of minutes to spend at this step – i.e. the amount of time we are to hold this particular step temperature.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Infusion', 'Temperature' or 'Decoction' depending on the type of step.  Infusion denotes adding hot water, Temperature denotes heating with an outside heat source, and decoction denotes drawing off some mash for boiling.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the mash step record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.MASH_STEPS.MASH_STEP.WATER_GRAIN_RATIO": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The total ratio of water to grain for this step AFTER the infusion along with the units, usually expressed in qt/lb or l/kg.  Note this value must be consistent with the required infusion amount and amounts added in earlier steps and is only relevant as part of a <MASH> profile.  For example '1.5 qt/lb' or '3.0 l/kg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the mash profile.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes associated with this profile – may be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.PH": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "PH of the sparge.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.SPARGE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "Temperature of the sparge water used in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.TUN_SPECIFIC_HEAT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "Specific heat of the tun material in calories per gram-degree C.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.TUN_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "Grain tun temperature – may be used to adjust the infusion temperature for equipment if the program supports it.  Measured in degrees C.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASH.TUN_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Weight (Kg)",
+      "UNITS": "kg",
+      "DESCRIPTION": "Weight of the mash tun in kilograms",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASH.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the mash record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Mash Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "A MASH profile record containing one or more MASH_STEPs.  NOTE: No Mash record is needed for 'Extract' type brews.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a MASH profile record.  All items below should appear between the <MASH>..</MASH> elements.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.DISPLAY_GRAIN_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Grain temperature in user display units with the units.  For example: '72 F'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.DISPLAY_SPARGE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Sparge temperature in user defined units.  For example '178 F'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.DISPLAY_TUN_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Tun temperature in user display units.  For example '68 F'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.DISPLAY_TUN_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Tun weight in user defined units – for example '10 lb'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.EQUIP_ADJUST": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "If TRUE, mash infusion and decoction calculations should take into account the temperature effects of the equipment (tun specific heat and tun weight).  If FALSE, the tun is assumed to be pre-heated.  Default is FALSE.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.GRAIN_TEMP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The temperature of the grain before adding it to the mash in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a MASH_STEP record -- any of the below tags may be included in any order within the <MASH_STEP>…. </MASH_STEP> record tags.  Any non-standard tags in the mash step will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.DECOCTION_AMT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Calculated volume of mash to decoct.  Only applicable for a decoction step.  Includes the units as in '7.5 l' or '2.3 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.DESCRIPTION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Textual description of this step such as 'Infuse 4.5 gal of water at 170 F' – may be either generated by the program or input by the user.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.DISPLAY_INFUSE_AMT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Infusion amount along with the volume units as in '20 l' or '13 qt'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.DISPLAY_STEP_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Step temperature in user defined temperature units.  For example '154F' or '68 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.END_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (Celsius)",
+      "UNITS": "°C",
+      "DESCRIPTION": "the temperature you can expect the mash to fall to after a long mash step.  Measured in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.INFUSE_AMOUNT": [
+    {
+      "REQUIRED": "Conditional",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The volume of water in liters to infuse in this step.  Required only for infusion steps, though one may also add water for temperature mash steps.  One should not have an infusion amount for decoction steps.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.INFUSE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The calculated infusion temperature based on the current step, grain, and other settings.  Applicable only for an infusion step. Includes the units as in '154 F' or '68 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the mash step – usually descriptive text such as 'Dough In' or 'Conversion'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.RAMP_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "Time in minutes to achieve the desired step temperature – useful particularly for temperature mashes where it may take some time to achieve the step temperature.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.STEP_TEMP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The target temperature for this step in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.STEP_TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time in Minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The number of minutes to spend at this step – i.e. the amount of time we are to hold this particular step temperature.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Infusion', 'Temperature' or 'Decoction' depending on the type of step.  Infusion denotes adding hot water, Temperature denotes heating with an outside heat source, and decoction denotes drawing off some mash for boiling.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the mash step record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEP.WATER_GRAIN_RATIO": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The total ratio of water to grain for this step AFTER the infusion along with the units, usually expressed in qt/lb or l/kg.  Note this value must be consistent with the required infusion amount and amounts added in earlier steps and is only relevant as part of a <MASH> profile.  For example '1.5 qt/lb' or '3.0 l/kg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Record set that starts the list of <MASH_STEP> records.  All MASH_STEP records should appear between the <MASH_STEPS> … </MASH_STEPS> pair.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a MASH_STEP record -- any of the below tags may be included in any order within the <MASH_STEP>…. </MASH_STEP> record tags.  Any non-standard tags in the mash step will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.DECOCTION_AMT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Calculated volume of mash to decoct.  Only applicable for a decoction step.  Includes the units as in '7.5 l' or '2.3 gal'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.DESCRIPTION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Textual description of this step such as 'Infuse 4.5 gal of water at 170 F' – may be either generated by the program or input by the user.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.DISPLAY_INFUSE_AMT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Infusion amount along with the volume units as in '20 l' or '13 qt'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.DISPLAY_STEP_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Step temperature in user defined temperature units.  For example '154F' or '68 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.END_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (Celsius)",
+      "UNITS": "°C",
+      "DESCRIPTION": "the temperature you can expect the mash to fall to after a long mash step.  Measured in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.INFUSE_AMOUNT": [
+    {
+      "REQUIRED": "Conditional",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "The volume of water in liters to infuse in this step.  Required only for infusion steps, though one may also add water for temperature mash steps.  One should not have an infusion amount for decoction steps.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.INFUSE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The calculated infusion temperature based on the current step, grain, and other settings.  Applicable only for an infusion step. Includes the units as in '154 F' or '68 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the mash step – usually descriptive text such as 'Dough In' or 'Conversion'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.RAMP_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "Time in minutes to achieve the desired step temperature – useful particularly for temperature mashes where it may take some time to achieve the step temperature.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.STEP_TEMP": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The target temperature for this step in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.STEP_TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time in Minutes",
+      "UNITS": "minutes",
+      "DESCRIPTION": "The number of minutes to spend at this step – i.e. the amount of time we are to hold this particular step temperature.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Infusion', 'Temperature' or 'Decoction' depending on the type of step.  Infusion denotes adding hot water, Temperature denotes heating with an outside heat source, and decoction denotes drawing off some mash for boiling.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the mash step record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.MASH_STEPS.MASH_STEP.WATER_GRAIN_RATIO": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The total ratio of water to grain for this step AFTER the infusion along with the units, usually expressed in qt/lb or l/kg.  Note this value must be consistent with the required infusion amount and amounts added in earlier steps and is only relevant as part of a <MASH> profile.  For example '1.5 qt/lb' or '3.0 l/kg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the mash profile.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes associated with this profile – may be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.PH": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "PH of the sparge.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.SPARGE_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "Temperature of the sparge water used in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.TUN_SPECIFIC_HEAT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "Specific heat of the tun material in calories per gram-degree C.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.TUN_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "Grain tun temperature – may be used to adjust the infusion temperature for equipment if the program supports it.  Measured in degrees C.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MASHS.MASH.TUN_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Weight (Kg)",
+      "UNITS": "kg",
+      "DESCRIPTION": "Weight of the mash tun in kilograms",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MASHS.MASH.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the mash record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Miscs Record",
+      "UNITS": "",
+      "DESCRIPTION": "An individual MISC record",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a misc ingredient record -- any of the below tags may be included in any order within the <MISC>…. </MISC> record tags.  Any non-standard tags in the misc will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (l) or Weight (kg)",
+      "UNITS": "",
+      "DESCRIPTION": "Amount of item used.  The default measurements are by weight, but this may be the measurement in volume units if AMOUNT_IS_WEIGHT is set to TRUE for this record.  If a liquid it is in liters, if a solid the weight is measured in kilograms.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MISC.AMOUNT_IS_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "TRUE if the amount measurement is a weight measurement and FALSE if the amount is a volume measurement.  Default value (if not present) is assumed to be FALSE.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MISC.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of the item in this record along with the units formatted for easy display in the current user defined units.  For example '1.5 lbs' or '2.1 kg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.DISPLAY_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Time in appropriate units along with the units as in '10 min' or '3 days'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.INVENTORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount in inventory for this item along with the units – for example '10.0 lb'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the misc item.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Detailed notes on the item including usage.  May be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time (min)",
+      "UNITS": "minutes",
+      "DESCRIPTION": "Amount of time the misc was boiled, steeped, mashed, etc in minutes.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MISC.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Spice', 'Fining', 'Water Agent', 'Herb', 'Flavor' or 'Other'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.USE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Boil', 'Mash', 'Primary', 'Secondary', 'Bottling'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.USE_FOR": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Short description of what the ingredient is used for in text",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISC.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version number of this element.  Should be '1' for this version.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Miscs Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Zero or more MISC records may appear between <MISCS> … </MISCS>",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Miscs Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Zero or more MISC records may appear between <MISCS> … </MISCS>",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a misc ingredient record -- any of the below tags may be included in any order within the <MISC>…. </MISC> record tags.  Any non-standard tags in the misc will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (l) or Weight (kg)",
+      "UNITS": "",
+      "DESCRIPTION": "Amount of item used.  The default measurements are by weight, but this may be the measurement in volume units if AMOUNT_IS_WEIGHT is set to TRUE for this record.  If a liquid it is in liters, if a solid the weight is measured in kilograms.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MISCS.MISC.AMOUNT_IS_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "TRUE if the amount measurement is a weight measurement and FALSE if the amount is a volume measurement.  Default value (if not present) is assumed to be FALSE.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MISCS.MISC.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of the item in this record along with the units formatted for easy display in the current user defined units.  For example '1.5 lbs' or '2.1 kg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.DISPLAY_TIME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Time in appropriate units along with the units as in '10 min' or '3 days'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.INVENTORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount in inventory for this item along with the units – for example '10.0 lb'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the misc item.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Detailed notes on the item including usage.  May be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.TIME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Time (min)",
+      "UNITS": "minutes",
+      "DESCRIPTION": "Amount of time the misc was boiled, steeped, mashed, etc in minutes.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "MISCS.MISC.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Spice', 'Fining', 'Water Agent', 'Herb', 'Flavor' or 'Other'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.USE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Boil', 'Mash', 'Primary', 'Secondary', 'Bottling'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.USE_FOR": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Short description of what the ingredient is used for in text",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "MISCS.MISC.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version number of this element.  Should be '1' for this version.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the recipe.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes associated with this recipe – may be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "OG": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The measured original (pre-fermentation) specific gravity of the beer.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "PRIMARY_AGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Time (days)",
+      "UNITS": "days",
+      "DESCRIPTION": "Time spent in the primary in days",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "PRIMARY_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature C",
+      "UNITS": "°C",
+      "DESCRIPTION": "Temperature in degrees Celsius for the primary fermentation.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "PRIMING_SUGAR_EQUIV": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating point",
+      "UNITS": "",
+      "DESCRIPTION": "Factor used to convert this priming agent to an equivalent amount of corn sugar for a bottled scenario.  For example, “Dry Malt Extract” would have a value of 1.4 because it requires 1.4 times as much DME as corn sugar to carbonate.  To calculate the amount of DME needed, the program can calculate the amount of corn sugar needed and then multiply by this factor.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "PRIMING_SUGAR_NAME": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Text describing the priming agent such as “Honey” or “Corn Sugar” – used only if this is not a forced carbonation",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "RECIPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a RECIPE.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "SECONDARY_AGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Time (days)",
+      "UNITS": "days",
+      "DESCRIPTION": "Time spent in the secondary in days.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "SECONDARY_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C )",
+      "UNITS": "°C",
+      "DESCRIPTION": "Temperature in degrees Celsius for the secondary fermentation.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a STYLE record -- any of the below tags may be included in any order within the <STYLE>…. </STYLE> record tags.  Any non-standard tags in the style will be ignored.",
+      "RECIPE_FUNCTION": ""
+    }
+  ],
+  "STYLE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Style Record",
+      "UNITS": "",
+      "DESCRIPTION": "An individual STYLE record",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Style Record",
+      "UNITS": "",
+      "DESCRIPTION": "The style of the beer this recipe is associated with.  All of the required items for a valid style should be between the <STYLE>…</STYLE> tags.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.ABV_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "The maximum recommended alcohol by volume as a percentage.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.ABV_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "The minimum recommended alcohol by volume as a percentage.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.ABV_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "ABV Range for this style such as '4.5-5.5%'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.CARB_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volumes of CO2",
+      "UNITS": "",
+      "DESCRIPTION": "The maximum recommended carbonation for this style in volumes of CO2",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.CARB_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volumes of CO2",
+      "UNITS": "",
+      "DESCRIPTION": "Minimum recommended carbonation for this style in volumes of CO2",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.CARB_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Carbonation range in volumes such as '2.0-2.6 vols'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.CATEGORY": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Category that this style belongs to – usually associated with a group of styles such as 'English Ales' or 'Amercian Lagers'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.CATEGORY_NUMBER": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Number or identifier associated with this style category.  For example in the BJCP style guide, the 'American Lager' category has a category number of '1'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.COLOR_MAX": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "SRM Color",
+      "UNITS": "",
+      "DESCRIPTION": "The maximum recommended color in SRM.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.COLOR_MIN": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "SRM Color",
+      "UNITS": "",
+      "DESCRIPTION": "The minimum recommended color in SRM",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.COLOR_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Color range such as '10-20 SRM'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.DISPLAY_COLOR_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Maximum color in user defined units such as '20 srm'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.DISPLAY_COLOR_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Minimum color in user defined units such as '30 srm'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.DISPLAY_FG_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Final gravity maximum in user defined units such as '1.019 sg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.DISPLAY_FG_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Final gravity minimum in user defined units such as '1.010 sg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.DISPLAY_OG_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Original gravity max in user defined units such as '1.056 sg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.DISPLAY_OG_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Original gravity minimum in user defined units such as '1.036 sg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.EXAMPLES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Example beers of this style.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.FG_MAX": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The maximum final gravity as measured relative to water.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.FG_MIN": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The minimum final gravity as measured relative to water.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.FG_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Final gravity range such as '1.010-1.015 sg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.IBU_MAX": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "IBUs",
+      "UNITS": "",
+      "DESCRIPTION": "The recommended maximum bitterness for this style as measured in International Bitterness Units (IBUs)",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.IBU_MIN": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "IBUs",
+      "UNITS": "",
+      "DESCRIPTION": "The recommended minimum bitterness for this style as measured in International Bitterness Units (IBUs)",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.IBU_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Bitterness range in IBUs such as '10-20 IBU'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.INGREDIENTS": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Suggested ingredients for this style",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the style profile – usually this is the specific name of the style – for example 'Scottish Wee Heavy Ale' and not the Category which in this case might be 'Scottish Ale'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Description of the style, history",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.OG_MAX": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The maximum specific gravity as measured relative to water.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.OG_MIN": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The minimum specific gravity as measured relative to water.  For example '1.040' might be a reasonable minimum for a Pale Ale.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.OG_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Original gravity range for the style such as '1.030-1.040 sg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.PROFILE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Flavor and aroma profile for this style",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.STYLE_GUIDE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The name of the style guide that this particular style or category belongs to.  For example 'BJCP' might denote the BJCP style guide, and 'AHA' would be used for the AHA style guide.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.STYLE_LETTER": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The specific style number or subcategory letter associated with this particular style.  For example in the BJCP style guide, an American Standard Lager would be style letter 'A' under the main category.  Letters should be upper case.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Lager', 'Ale', 'Mead', 'Wheat', 'Mixed' or 'Cider'.  Defines the type of beverage associated with this category.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLE.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the style record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Style Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "The style of the beer this recipe is associated with.  All of the required items for a valid style should be between the <STYLE>…</STYLE> tags.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a STYLE record -- any of the below tags may be included in any order within the <STYLE>…. </STYLE> record tags.  Any non-standard tags in the style will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.ABV_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "The maximum recommended alcohol by volume as a percentage.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.ABV_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "The minimum recommended alcohol by volume as a percentage.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.ABV_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "ABV Range for this style such as '4.5-5.5%'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.CARB_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volumes of CO2",
+      "UNITS": "",
+      "DESCRIPTION": "The maximum recommended carbonation for this style in volumes of CO2",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.CARB_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Volumes of CO2",
+      "UNITS": "",
+      "DESCRIPTION": "Minimum recommended carbonation for this style in volumes of CO2",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.CARB_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Carbonation range in volumes such as '2.0-2.6 vols'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.CATEGORY": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Category that this style belongs to – usually associated with a group of styles such as 'English Ales' or 'Amercian Lagers'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.CATEGORY_NUMBER": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Number or identifier associated with this style category.  For example in the BJCP style guide, the 'American Lager' category has a category number of '1'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.COLOR_MAX": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "SRM Color",
+      "UNITS": "",
+      "DESCRIPTION": "The maximum recommended color in SRM.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.COLOR_MIN": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "SRM Color",
+      "UNITS": "",
+      "DESCRIPTION": "The minimum recommended color in SRM",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.COLOR_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Color range such as '10-20 SRM'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.DISPLAY_COLOR_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Maximum color in user defined units such as '20 srm'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.DISPLAY_COLOR_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Minimum color in user defined units such as '30 srm'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.DISPLAY_FG_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Final gravity maximum in user defined units such as '1.019 sg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.DISPLAY_FG_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Final gravity minimum in user defined units such as '1.010 sg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.DISPLAY_OG_MAX": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Original gravity max in user defined units such as '1.056 sg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.DISPLAY_OG_MIN": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Original gravity minimum in user defined units such as '1.036 sg'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.EXAMPLES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Example beers of this style.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.FG_MAX": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The maximum final gravity as measured relative to water.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.FG_MIN": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The minimum final gravity as measured relative to water.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.FG_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Final gravity range such as '1.010-1.015 sg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.IBU_MAX": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "IBUs",
+      "UNITS": "",
+      "DESCRIPTION": "The recommended maximum bitterness for this style as measured in International Bitterness Units (IBUs)",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.IBU_MIN": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "IBUs",
+      "UNITS": "",
+      "DESCRIPTION": "The recommended minimum bitterness for this style as measured in International Bitterness Units (IBUs)",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.IBU_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Bitterness range in IBUs such as '10-20 IBU'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.INGREDIENTS": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Suggested ingredients for this style",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the style profile – usually this is the specific name of the style – for example 'Scottish Wee Heavy Ale' and not the Category which in this case might be 'Scottish Ale'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Description of the style, history",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.OG_MAX": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The maximum specific gravity as measured relative to water.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.OG_MIN": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Specific Gravity",
+      "UNITS": "",
+      "DESCRIPTION": "The minimum specific gravity as measured relative to water.  For example '1.040' might be a reasonable minimum for a Pale Ale.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.OG_RANGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Original gravity range for the style such as '1.030-1.040 sg'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.PROFILE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Flavor and aroma profile for this style",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.STYLE_GUIDE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The name of the style guide that this particular style or category belongs to.  For example 'BJCP' might denote the BJCP style guide, and 'AHA' would be used for the AHA style guide.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.STYLE_LETTER": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The specific style number or subcategory letter associated with this particular style.  For example in the BJCP style guide, an American Standard Lager would be style letter 'A' under the main category.  Letters should be upper case.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Lager', 'Ale', 'Mead', 'Wheat', 'Mixed' or 'Cider'.  Defines the type of beverage associated with this category.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "STYLES.STYLE.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the style record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "TASTE_NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Tasting notes – may be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "TASTE_RATING": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "Number between zero and 50.0 denoting the taste rating – corresponds to the 50 point BJCP rating system.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "TERTIARY_AGE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Time (days)",
+      "UNITS": "days",
+      "DESCRIPTION": "Time spent in the third fermenter in days.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "TERTIARY_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature C",
+      "UNITS": "°C",
+      "DESCRIPTION": "Temperature in the tertiary fermenter.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be one of “Extract”, “Partial Mash” or “All Grain”",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the recipe record.  Should always be “1” for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a WATER ingredient record -- any of the below tags may be included in any order within the <WATER>…. </WATER> record tags.  Any non-standard tags in the water will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Volume of water to use in a recipe in liters.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.BICARBONATE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of bicarbonate (HCO3) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.CALCIUM": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of calcium (Ca) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.CHLORIDE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of Chloride (Cl) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of water in this record along with the units formatted for easy display in the current user defined units.  For example '5.0 gal' or '20.0 l'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.MAGNESIUM": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of Magnesium (Mg) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the water profile – usually the city and country of the water profile.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes about the water profile.  May be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.PH": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "The PH of the water.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.SODIUM": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of Sodium (Na) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.SULFATE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of Sulfate (SO4) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATER.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the water record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Waters Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Zero or more WATER records may appear between <WATERS> … </WATERS>",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a WATER ingredient record -- any of the below tags may be included in any order within the <WATER>…. </WATER> record tags.  Any non-standard tags in the water will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters)",
+      "UNITS": "L",
+      "DESCRIPTION": "Volume of water to use in a recipe in liters.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.BICARBONATE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of bicarbonate (HCO3) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.CALCIUM": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of calcium (Ca) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.CHLORIDE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of Chloride (Cl) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of water in this record along with the units formatted for easy display in the current user defined units.  For example '5.0 gal' or '20.0 l'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.MAGNESIUM": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of Magnesium (Mg) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the water profile – usually the city and country of the water profile.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes about the water profile.  May be multiline.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.PH": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Floating Point",
+      "UNITS": "",
+      "DESCRIPTION": "The PH of the water.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.SODIUM": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of Sodium (Na) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.SULFATE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Floating Point",
+      "UNITS": "ppm",
+      "DESCRIPTION": "The amount of Sulfate (SO4) in parts per million.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "WATERS.WATER.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the water record.  Should always be '1' for this version of the XML standard.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a yeast ingredient record -- any of the below tags may be included in any order within the <YEAST>…. </YEAST> record tags.  Any non-standard tags in the yeast will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.ADD_TO_SECONDARY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "Flag denoting that this yeast was added for a secondary (or later) fermentation as opposed to the primary fermentation.  Useful if one uses two or more yeast strains for a single brew (eg: Lambic).  Default value is FALSE.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters) or Weight (kg)",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of yeast, measured in liters.  For a starter this is the size of the starter.  If the flag AMOUNT_IS_WEIGHT is set to TRUE then this measurement is in kilograms and not liters.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "YEAST.AMOUNT_IS_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "TRUE if the amount measurement is a weight measurement and FALSE if the amount is a volume measurement.  Default value (if not present) is assumed to be FALSE – therefore the yeast measurement is a liquid amount by default.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.ATTENUATION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Average attenuation for this yeast strain.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.BEST_FOR": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Styles or types of beer this yeast strain is best suited for.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.CULTURE_DATE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Date sample was last cultured in a neutral date form such as '10 Dec 04'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.DISP_MAX_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Maximum fermentation temperature converted to current user units along with the units.  For example '54.0 F' or '24.2 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.DISP_MIN_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Minimum fermentation temperature converted to current user units along with the units.  For example '54.0 F' or '24.2 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of yeast or starter in this record along with the units formatted for easy display in the current user defined units.  For example '1.5 oz' or '100 g'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.FLOCCULATION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Low', 'Medium', 'High' or 'Very High'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.FORM": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Liquid', 'Dry', 'Slant' or 'Culture'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.INVENTORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount in inventory for this hop along with the units – for example '10.0 pkgs'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.LABORATORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The name of the laboratory that produced the yeast.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.MAX_REUSE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Recommended of times this yeast can be reused (recultured from a previous batch)",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.MAX_TEMPERATURE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The maximum recommended temperature for fermenting this yeast strain in Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "YEAST.MIN_TEMPERATURE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The minimum recommended temperature for fermenting this yeast strain in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "YEAST.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the yeast.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes on this yeast strain.  May be a multiline entry.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.PRODUCT_ID": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The manufacturer’s product ID label or number that identifies this particular strain of yeast.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.TIMES_CULTURED": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Number of times this yeast has been reused as a harvested culture.  This number should be zero if this is a product directly from the manufacturer.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Ale', 'Lager', 'Wheat', 'Wine' or 'Champagne'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEAST.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the standard.  Should be '1' for this version.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Yeasts Record Set",
+      "UNITS": "",
+      "DESCRIPTION": "Zero or more YEAST records may appear between <YEASTS> … </YEASTS>",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Record",
+      "UNITS": "",
+      "DESCRIPTION": "Starts a yeast ingredient record -- any of the below tags may be included in any order within the <YEAST>…. </YEAST> record tags.  Any non-standard tags in the yeast will be ignored.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.ADD_TO_SECONDARY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "Flag denoting that this yeast was added for a secondary (or later) fermentation as opposed to the primary fermentation.  Useful if one uses two or more yeast strains for a single brew (eg: Lambic).  Default value is FALSE.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.AMOUNT": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Volume (liters) or Weight (kg)",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of yeast, measured in liters.  For a starter this is the size of the starter.  If the flag AMOUNT_IS_WEIGHT is set to TRUE then this measurement is in kilograms and not liters.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "YEASTS.YEAST.AMOUNT_IS_WEIGHT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Boolean",
+      "UNITS": "",
+      "DESCRIPTION": "TRUE if the amount measurement is a weight measurement and FALSE if the amount is a volume measurement.  Default value (if not present) is assumed to be FALSE – therefore the yeast measurement is a liquid amount by default.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.ATTENUATION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Percent",
+      "UNITS": "%",
+      "DESCRIPTION": "Average attenuation for this yeast strain.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.BEST_FOR": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Styles or types of beer this yeast strain is best suited for.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.CULTURE_DATE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Date sample was last cultured in a neutral date form such as '10 Dec 04'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.DISP_MAX_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Maximum fermentation temperature converted to current user units along with the units.  For example '54.0 F' or '24.2 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.DISP_MIN_TEMP": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Minimum fermentation temperature converted to current user units along with the units.  For example '54.0 F' or '24.2 C'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.DISPLAY_AMOUNT": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The amount of yeast or starter in this record along with the units formatted for easy display in the current user defined units.  For example '1.5 oz' or '100 g'.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.FLOCCULATION": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Low', 'Medium', 'High' or 'Very High'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.FORM": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Liquid', 'Dry', 'Slant' or 'Culture'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.INVENTORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Amount in inventory for this hop along with the units – for example '10.0 pkgs'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.LABORATORY": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The name of the laboratory that produced the yeast.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.MAX_REUSE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Recommended of times this yeast can be reused (recultured from a previous batch)",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.MAX_TEMPERATURE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The maximum recommended temperature for fermenting this yeast strain in Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "YEASTS.YEAST.MIN_TEMPERATURE": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Temperature (C)",
+      "UNITS": "°C",
+      "DESCRIPTION": "The minimum recommended temperature for fermenting this yeast strain in degrees Celsius.",
+      "RECIPE_FUNCTION": "TRUE"
+    }
+  ],
+  "YEASTS.YEAST.NAME": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Name of the yeast.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.NOTES": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "Notes on this yeast strain.  May be a multiline entry.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.PRODUCT_ID": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Text",
+      "UNITS": "",
+      "DESCRIPTION": "The manufacturer’s product ID label or number that identifies this particular strain of yeast.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.TIMES_CULTURED": [
+    {
+      "REQUIRED": "No",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Number of times this yeast has been reused as a harvested culture.  This number should be zero if this is a product directly from the manufacturer.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.TYPE": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "List",
+      "UNITS": "",
+      "DESCRIPTION": "May be 'Ale', 'Lager', 'Wheat', 'Wine' or 'Champagne'",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ],
+  "YEASTS.YEAST.VERSION": [
+    {
+      "REQUIRED": "Yes",
+      "FORMAT": "Integer",
+      "UNITS": "",
+      "DESCRIPTION": "Version of the standard.  Should be '1' for this version.",
+      "RECIPE_FUNCTION": "FALSE"
+    }
+  ]
+}
