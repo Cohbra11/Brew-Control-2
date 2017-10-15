@@ -9,19 +9,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Cohbra11/brewcontroller.git"
+    "url": "git@github.com:Cohbra11/Brew-Control-2.git"
   },
   "keywords": [
-    "resin.io",
     "webserver",
     "nodejs",
     "expressjs"
   ],
-  "author": "Brian Thornton <gh_cohbra11@resin.io>",
+  "author": "Brian Thornton <centeraxis@comcast.net>",
   "bugs": {
-    "url": "https://github.com/Cohbra11/brewcontroller/issues"
+    "url": "https://github.com/Cohbra11/Brew-Control-2/issues"
   },
-  "homepage": "https://github.com/Cohbra11/brewcontroller#readme",
+  "homepage": "https://github.com/Cohbra11/Brew-Control-2#readme",
   "dependencies": {
     "async": "0.2.10",
     "express": "^3.2.6",
