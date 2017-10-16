@@ -1,7 +1,7 @@
 {
   "name": "brew_controller_server",
-  "version": "1.0.0",
-  "description": "",
+  "version": "v1.0.0",
+  "description": ",-----.,--.                  ,--. ,---.   ,--.,------.  ,------.     '  .--./|  | ,---. ,--.,--. ,-|  || o   \\  |  ||  .-.  \\ |  .---'     |  |    |  || .-. ||  ||  |' .-. |`..'  |  |  ||  |  \\  :|  `--,      '  '--'\\|  |' '-' ''  ''  '\\ `-' | .'  /   |  ||  '--'  /|  `---.      `-----'`--' `---'  `----'  `---'  `--'    `--'`-------' `------'     -----------------------------------------------------------------",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:Cohbra11/Brew-Control-2.git"
+    "url": "git+ssh://git@github.com/Cohbra11/Brew-Control-2.git"
   },
   "keywords": [
     "webserver",
@@ -31,5 +31,7 @@
     "pug": "2.0.0-beta6",
     "socket.io": "0.9.17",
     "xml2js": "0.4.17"
-  }
+  },
+  "devDependencies": {},
+  "license": "ISC"
 }

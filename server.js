@@ -10,6 +10,7 @@ var express = require('express');
 var mysql = require('./connect-mysql.js').mysqlCon;
 var wpa_cli = require('wireless-tools/wpa_cli');
 var wpa_supplicant = require('wireless-tools/wpa_supplicant');
+var latestGithubTag = require("latest-github-tag");
 var numControls = 3;
 var liquidPID = require('liquid-pid');
 var pidController = [];
@@ -74,8 +75,26 @@ var processingSchedule = false;
 var initComplete = false;
 brewScheduleLoaded = false;
 
-function initializeEquip(numControls) {
+function checkVersion(){
+	var tag;
+	var current_version = require('./package.json');
+	latestGithubTag('Cohbra11', 'Brew-Control-2', {
+		timeout: 0,
+	}).then(function (tag) {
+		console.log(tag) // Outputs the latest tag 
+		var versions = {
+			"cur_version": current_version.version,
+			"new_version": tag
+		};
+		globalSocket.emit("versions", versions);	})
+	.catch(function (err) {
+		console.error(err)
+	})
 
+}
+
+function initializeEquip(numControls) {
+	
 	for (var i = 0; i < numControls; i++) { //initialize the arrays for the pid controller
 		targetTemp[i] = 0;
 		equipSettings[i] = 0;
@@ -101,7 +120,7 @@ function initializeEquip(numControls) {
 	readActiveBrewState();	
 	return true;
 }
-initializeEquip(numControls)
+initializeEquip(numControls);
 
 initDbTables(2,
 	initDbTables(1,
@@ -145,6 +164,7 @@ io.on('connection', function(socket) {
 
 	sockets.push(socket);
 	globalSocket = socket;
+	checkVersion();
 
 	socket.on('disconnect', function() {
 		sockets.splice(sockets.indexOf(socket), 1);
@@ -169,6 +189,16 @@ io.on('connection', function(socket) {
 	socket.on('power off', function(data) {
 		console.log('Shutting Down Brew Controller Server.');
 		child = exec("shutdown -P", function(error, stdout, stderr) {});
+	});
+
+	socket.on('restart', function(data) {
+		console.log('Restarting the Brew Controller Server.');
+		child = exec("shutdown -r", function(error, stdout, stderr) {});
+	});
+
+	socket.on('install_update', function() {
+		console.log('Installing software updates');
+		//child = exec("shutdown -r", function(error, stdout, stderr) {});
 	});
 
 	socket.on('checkWifiConfig', function(data) {

@@ -1,0 +1,9 @@
+*.bak
+./recipes/
+./client/jsonFiles/activeBrewState.json
+./client/jsonFiles/brewSchedule.json
+./client/jsonFiles/control0_temp.json
+./client/jsonFiles/control1_temp.json
+./client/jsonFiles/control2_temp.json
+./client/jsonFiles/recipes.json
+./client/jsonFiles/settings.json

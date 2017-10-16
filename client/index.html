@@ -1863,6 +1863,15 @@
 						}
 					}
 				});
+				
+				socket.on('versions', function (versions) {
+					if(versions.cur_version != versions.new_version){
+						//alert("Update from "+ versions.cur_version +" > "+ versions.new_version +"?");
+						document.getElementById('update_cur_version').innerText = "Current: "+versions.cur_version;
+						document.getElementById('update_new_version').innerText = "    New: "+versions.new_version;
+						$('.update').modal('show');
+					}
+				});
 			}
 			
 		    $(document).on('click', '#connectWithPassphrase', function(e){
@@ -2497,6 +2506,20 @@
 						writeSocket('power off');
 		    		});
 		    	});
+
+				$(function () {
+		    		$('#restart').click(function(){
+		    			$('.powerOffModal').modal('hide');
+						writeSocket('restart');
+		    		});
+		    	});
+
+				$(function () {
+		    		$('#install_update').click(function(){
+		    			$('.update').modal('hide');
+						writeSocket('install_update');
+		    		});
+		    	});
 				
 				function wifiPanelVisible(callback) {  
 					if($('.wifiPanel').hasClass('visible')) {
@@ -2544,13 +2567,6 @@
 							text: "Searching..."
 						}));
 							
-		    		});
-		    	});
-
-				$(function () {
-		    		$('#power-off').click(function(){
-		    			$('.networkModal').modal('hide');
-						//writeSocket('power off');
 		    		});
 		    	});
 
@@ -3289,11 +3305,35 @@
 		        	<h4 class="modal-title">Shut Down</h4>
 		      	</div>
 		      	<div class="modal-body">
-		      		<div>Are you sure you want to shut down the Brew Controller?</div>
+		      		<div>Are you sure you want to shut down or restart the Brew Controller?</div>
 	      		</div>
 		      	<div class="modal-footer">
 		        	<button type="button" id="cancelShutdown" class="btn btn-default" data-dismiss="modal" >Cancel</button>
+		        	<button type="button" id="restart" class="btn btn-default" data-dismiss="modal" >Restart</button>
 		        	<button type="button" id="power-off" class="btn btn-default" data-dismiss="modal" >Shut Down</button>
+		      	</div>
+    		</div>
+	    	<!-- /.modal-content -->
+	  	</div>
+	  	<!-- /.modal-dialog -->
+	</div>
+	<div class="update modal fade">
+	  	<div class="modal-dialog">
+	    	<div class="modal-content">
+		      	<div class="modal-header">
+		        	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        	<h4 class="modal-title">Software Update</h4>
+		      	</div>
+		      	<div class="modal-body">
+		      		<div>A new software update is available.  Would you like to update now?</div>
+					<div>&nbsp </div>
+					<div id="update_cur_version"></div>
+					<div id="update_new_version"></div>
+					<div>&nbsp </div>
+	      		</div>
+		      	<div class="modal-footer">
+		        	<button type="button" id="cancel" class="btn btn-default" data-dismiss="modal" >Cancel</button>
+		        	<button type="button" id="install_update" class="btn btn-default" data-dismiss="modal" >Install</button>
 		      	</div>
     		</div>
 	    	<!-- /.modal-content -->
@@ -3308,95 +3348,95 @@
 		        	<h4 class="modal-title">Network Configuration</h4>
 		      	</div>
 		      	<div class="modal-body">
-											<div class="flip-container node">
-												<p>
-													<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">LAN
-														<span class="pull-right">
-															<i class="glyphicon glyphicon-chevron-up"></i>
-														</span>
-													</a>		    					
-												</p>
-												<div id="lanAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls"  style="white-space:normal; display:none">
-													<form class="form-inline" ng-submit="send()" id="lanConfigForm">
-														<div class="input-group input-group-sm" style="width: 100%">
-															<select size="1" id="lanConnType" class="form-control input-sm pull-left btn-block vert-align" name="Lan Connection Type"></select>
-															<span class="input-group-addon" style="width:50%">LAN Connection Type</span>
-														</div> 
-														<div class="flip-container node lanStaticPanel" style="display:none">
-															<div id="lanStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
-																<div class="input-group input-group-sm" style="width: 100%">
-																	<input class="form-control input-sm pull-left btn-block vert-align lanIpAddress" size="1" type='text'/>
-																	<span class="input-group-addon" style="width:50%">IP Address</span>
-																</div> 
-																<div class="input-group input-group-sm" style="width: 100%">
-																	<input class="form-control input-sm pull-left btn-block vert-align lanSubNet" size="1" type='text'/>
-																	<span class="input-group-addon" style="width:50%">Subnet Mask</span>
-																</div> 
-																<div>&nbsp </div>
-															</div>
-														</div>
-													</form>
-													<div>&nbsp </div>
-												</div>
+					<div class="flip-container node">
+						<p>
+							<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">LAN
+								<span class="pull-right">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</span>
+							</a>		    					
+						</p>
+						<div id="lanAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls"  style="white-space:normal; display:none">
+							<form class="form-inline" ng-submit="send()" id="lanConfigForm">
+								<div class="input-group input-group-sm" style="width: 100%">
+									<select size="1" id="lanConnType" class="form-control input-sm pull-left btn-block vert-align" name="Lan Connection Type"></select>
+									<span class="input-group-addon" style="width:50%">LAN Connection Type</span>
+								</div> 
+								<div class="flip-container node lanStaticPanel" style="display:none">
+									<div id="lanStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
+										<div class="input-group input-group-sm" style="width: 100%">
+											<input class="form-control input-sm pull-left btn-block vert-align lanIpAddress" size="1" type='text'/>
+											<span class="input-group-addon" style="width:50%">IP Address</span>
+										</div> 
+										<div class="input-group input-group-sm" style="width: 100%">
+											<input class="form-control input-sm pull-left btn-block vert-align lanSubNet" size="1" type='text'/>
+											<span class="input-group-addon" style="width:50%">Subnet Mask</span>
+										</div> 
+										<div>&nbsp </div>
+									</div>
+								</div>
+							</form>
+							<div>&nbsp </div>
+						</div>
+					</div>
+					<div class="flip-container node wifiPanel">
+						<p>
+							<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">WIFI
+								<span class="pull-right">
+									<i class="glyphicon glyphicon-chevron-up"></i>
+								</span>
+							</a>		    					
+						</p>
+						<div id="wifiAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
+							<form class="form-inline" ng-submit="send()" id="wifiConfigForm">
+								<div class="input-group input-group-sm" style="width: 100%">
+									<select size="1" id="selectSSID" class="form-control input-sm pull-left btn-block vert-align" name="WIFI SSID"></select>
+									<span class="input-group-addon" style="width:50%">WIFI SSID</span>
+								</div> 
+								<div class="flip-container node wifiPassphrasePanel" >
+									<div id="lanStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
+										<div class="input-group input-group-sm" style="width: 100%">
+											<input class="form-control input-sm pull-left btn-block vert-align wifiPassphrase" size="1" style="text-align:center" type="password" id="passphraseInput"></input>
+											<span class="input-group-addon" style="width:50%">
+												<a class="pull-left" style="white-space:normal" data-title="Dynamic">
+													<span>
+														<i id="" class="showHidePassword clickable glyphicon glyphicon glyphicon-eye-open"></i>
+													</span>
+												</a>Passphrase
+											</span>
+										</div>
+										<div class="input-group input-group-sm" style="width: 100%">
+											<select size="1" id="wifiConnType" class="form-control input-sm pull-left btn-block vert-align" name="WIFI Connection Type"></select>
+											<span class="input-group-addon" style="width:50%">WIFI Connection Type</span>
+										</div> 
+										<div class="flip-container node wifiStaticPanel" style="display:none">
+											<div id="wifiStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
+												<div class="input-group input-group-sm" style="width: 100%">
+													<input class="form-control input-sm pull-left btn-block vert-align wifiIpAddress" size="1" type='text'/>
+													<span class="input-group-addon" style="width:50%">IP Address</span>
+												</div> 
+												<div class="input-group input-group-sm" style="width: 100%">
+													<input class="form-control input-sm pull-left btn-block vert-align wifiSubNet" size="1" type='text'/>
+													<span class="input-group-addon" style="width:50%">Subnet Mask</span>
+												</div> 
+												<div class="input-group input-group-sm" style="width: 100%">
+													<input class="form-control input-sm pull-left btn-block vert-align wifiGateway" size="1" type='text'/>
+													<span class="input-group-addon" style="width:50%">Gateway</span>
+												</div> 
+												<div>&nbsp </div>
 											</div>
-											<div class="flip-container node wifiPanel">
-												<p>
-													<a class="btn btn-xs recipe-node-click panel-primary btn-default pull-left btn-block" style="white-space:normal" data-title="Dynamic">WIFI
-														<span class="pull-right">
-															<i class="glyphicon glyphicon-chevron-up"></i>
-														</span>
-													</a>		    					
-												</p>
-												<div id="wifiAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
-													<form class="form-inline" ng-submit="send()" id="wifiConfigForm">
-														<div class="input-group input-group-sm" style="width: 100%">
-															<select size="1" id="selectSSID" class="form-control input-sm pull-left btn-block vert-align" name="WIFI SSID"></select>
-															<span class="input-group-addon" style="width:50%">WIFI SSID</span>
-														</div> 
-														<div class="flip-container node wifiPassphrasePanel" >
-															<div id="lanStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
-																<div class="input-group input-group-sm" style="width: 100%">
-																	<input class="form-control input-sm pull-left btn-block vert-align wifiPassphrase" size="1" style="text-align:center" type="password" id="passphraseInput"></input>
-																	<span class="input-group-addon" style="width:50%">
-																		<a class="pull-left" style="white-space:normal" data-title="Dynamic">
-																			<span>
-																				<i id="" class="showHidePassword clickable glyphicon glyphicon glyphicon-eye-open"></i>
-																			</span>
-																		</a>Passphrase
-																	</span>
-																</div>
-																<div class="input-group input-group-sm" style="width: 100%">
-																	<select size="1" id="wifiConnType" class="form-control input-sm pull-left btn-block vert-align" name="WIFI Connection Type"></select>
-																	<span class="input-group-addon" style="width:50%">WIFI Connection Type</span>
-																</div> 
-																<div class="flip-container node wifiStaticPanel" style="display:none">
-																	<div id="wifiStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">
-																		<div class="input-group input-group-sm" style="width: 100%">
-																			<input class="form-control input-sm pull-left btn-block vert-align wifiIpAddress" size="1" type='text'/>
-																			<span class="input-group-addon" style="width:50%">IP Address</span>
-																		</div> 
-																		<div class="input-group input-group-sm" style="width: 100%">
-																			<input class="form-control input-sm pull-left btn-block vert-align wifiSubNet" size="1" type='text'/>
-																			<span class="input-group-addon" style="width:50%">Subnet Mask</span>
-																		</div> 
-																		<div class="input-group input-group-sm" style="width: 100%">
-																			<input class="form-control input-sm pull-left btn-block vert-align wifiGateway" size="1" type='text'/>
-																			<span class="input-group-addon" style="width:50%">Gateway</span>
-																		</div> 
-																		<div>&nbsp </div>
-																	</div>
-																</div>
-																<div>
-																	<button type="button" id="connectWithPassphrase" class="btn btn-default pull-right">Connect</button>
-																</div> 
+										</div>
+										<div>
+											<button type="button" id="connectWithPassphrase" class="btn btn-default pull-right">Connect</button>
+										</div> 
 
-																<div>&nbsp </div>
-															</div>
-														</div>
-													</form>
-													<div>&nbsp </div>
-												</div>
-											</div>
+										<div>&nbsp </div>
+									</div>
+								</div>
+							</form>
+							<div>&nbsp </div>
+						</div>
+					</div>
 	      		</div>
 		      	<div class="modal-footer">
 		        	<button type="button" id="cancelShutdown" class="btn btn-default" data-dismiss="modal" >Done</button>
