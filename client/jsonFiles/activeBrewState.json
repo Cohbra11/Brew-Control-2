@@ -1,0 +1,101 @@
+{
+  "pidSettings": [
+    {
+      "_Tref": 0,
+      "_Pmax": 4000,
+      "_Kp": 25,
+      "_Ki": 1100,
+      "_Kd": 9,
+      "_P": -1000,
+      "_I": -1000,
+      "_D": 0,
+      "_MaxP": 1000,
+      "_MaxI": 1000,
+      "_MaxD": 1000,
+      "_MaxU": 1000,
+      "_e": -155.6366,
+      "_i": 0,
+      "_U": 0
+    },
+    {
+      "_Tref": 0,
+      "_Pmax": 4000,
+      "_Kp": 25,
+      "_Ki": 1000,
+      "_Kd": 9,
+      "_P": -1000,
+      "_I": -1000,
+      "_D": 0,
+      "_MaxP": 1000,
+      "_MaxI": 1000,
+      "_MaxD": 1000,
+      "_MaxU": 1000,
+      "_e": -158.5616,
+      "_i": 0,
+      "_U": 0
+    },
+    {
+      "_Tref": 0,
+      "_Pmax": 4000,
+      "_Kp": 25,
+      "_Ki": 1000,
+      "_Kd": 9,
+      "_P": -1000,
+      "_I": -1000,
+      "_D": 0,
+      "_MaxP": 1000,
+      "_MaxI": 1000,
+      "_MaxD": 1000,
+      "_MaxU": 1000,
+      "_e": -201.9866,
+      "_i": 0,
+      "_U": 0
+    }
+  ],
+  "equipSettings": [
+    {
+      "equipID": "0",
+      "temp": 0,
+      "units": "F"
+    },
+    {
+      "equipID": 1,
+      "temp": 0,
+      "units": "F"
+    },
+    {
+      "equipID": "2",
+      "temp": 0,
+      "units": "F"
+    }
+  ],
+  "paused": false,
+  "brewingActive": false,
+  "resumeBrewing": false,
+  "timeStamp": "2017-08-07T04:57:28.636Z",
+  "targetTempReached": false,
+  "step": {},
+  "previousTime": 0,
+  "countDownTime": 0,
+  "targetEquip": "2",
+  "countDownRemaining": -110,
+  "chart0heater": "1",
+  "chart0sensor": "1",
+  "chart0watts": "4000",
+  "chart1heater": "2",
+  "chart1sensor": "2",
+  "chart1watts": "165",
+  "chart1p": "25",
+  "chart1i": "1000",
+  "chart1d": "8",
+  "chart2heater": "3",
+  "chart2sensor": "3",
+  "chart2watts": "5500",
+  "chart2p": "25",
+  "chart2i": "1100",
+  "chart2d": "8",
+  "chart0i": "1100",
+  "chart0d": "8",
+  "chart0p": "25",
+  "recipe": "fine-mountain-milk-stout-left-hand-clone"
+}

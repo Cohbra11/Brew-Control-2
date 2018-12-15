@@ -23,7 +23,7 @@
 	<!-- this line removes any default padding and style. you might only need one of these values set. -->
   	<!--<link rel="stylesheet" href="bootstrap/dist/css/bootstrap.min.css">-->
   	<link rel="stylesheet" href="css/lobipanel.min.css"/>
-
+	
 	<style> body {padding: 0; margin: 0; font-size:14px;} </style>
 	<title>Brew Controller</title>
 	
@@ -147,6 +147,74 @@
 		background-color: #FF9999;
 	}
 	
+	#selectSSID option[value="1"]{
+		background: rgba(255,255,255,0.1) url('icons/Signal_4.png') repeat-x 0 0;
+	}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+li {
+ display: block;
+ transition-duration: 0.5s;
+}
+
+li:hover {
+  cursor: pointer;
+}
+
+ul li ul {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  transition: all 0.5s ease;
+  margin-top: 1rem;
+  left: 0;
+  display: none;
+}
+
+ul li:hover > ul,
+ul li ul:hover {
+  visibility: visible;
+  opacity: 1;
+  display: block;
+}
+
+ul li ul li {
+  clear: both;
+  width: 100%;
+}
+
+
+
+.dropdown {
+	display:none; 
+}
+.hover_dropdown:hover .dropdown { 
+	display:block; 
+}
+.hover_dropdown {
+	color: #fff;
+	background-color: #333333;
+}
+.hover_dropdown:hover {
+	color: #fff;
+	background-color: #00ccff;
+	border-color: #0d0d0d;
+}
+
+
+
 </style>
     <script>
     /* global $ io */
@@ -364,6 +432,15 @@
 		}
 		
 		function validateWifiConfig(data, callback){
+			console.log ("Validating WIFI Conn. Data");
+			
+			if (data.encrypted.indexOf("WPA") >= 0){
+			//if (data.encrypted === "[ESS]") {
+				console.log("not encrypted");
+				data.encrypted = true;
+			} else {
+				data.encrypted = false;
+			}
 			if (data.bssid != null && data.bssid !=""){
 				if (data.ssid != null && data.ssid !=""){
 					if (data.dhcp){
@@ -1451,7 +1528,11 @@
 											    	} else {
 											    		childRecipeContainer("main-"+use.toLowerCase()+"-schedule", "schedule-"+dataPath, use.toUpperCase()+'-'+divLabel, key);
 											    	}
-										    	}catch(err){}
+										    	}catch(err){
+													try{
+														childRecipeContainer("main-"+use.toLowerCase()+"-schedule", "schedule-"+dataPath, use.toUpperCase()+'-'+divLabel, key);
+													}catch(err){}
+												}
 										        break;
 										    case "YEAST":
 										    	childRecipeContainer("main-pitch-schedule", "schedule-"+dataPath, divLabel, key);
@@ -1812,32 +1893,90 @@
 				});
 				
 				socket.on('networkStatus', function (networks) {
-					var selectedSSID = $('#selectSSID option:selected').text();
-					console.log("selectedSSID: "+selectedSSID);
-					$('#selectSSID').find('option').remove();
+					console.log(JSON.stringify(networks));
+					var selectedSSID = $('#selectSSID').attr('data-network');
+					var signalStrengthIcon = "icons/Signal_5.png";
+					var securityIcon = null;
+					var signalStrength = -90;
+					var frequency = null;
+					$('#selectSSID').empty();
 					for(i=0; i < networks.results.length; i++){
 						if(networks.results[i].ssid != "" && networks.results[i].ssid != null){
+							if (networks.results[i].flags.indexOf("WPA") >= 0){
+								securityIcon = 'src="icons/secured_icon.png"';
+							}
+							signalStrength = parseInt(networks.results[i].signalLevel);
+							if (signalStrength <= -50){
+								signalStrengthIcon = "icons/Signal_4.png";
+							}
+							if (signalStrength <= -60){
+								signalStrengthIcon = "icons/Signal_3.png";
+							}
+							if (signalStrength <= -70){
+								signalStrengthIcon = "icons/Signal_2.png";
+							}
+							if (signalStrength <= -80){
+								signalStrengthIcon = "icons/Signal_1.png";
+							}
+							if (signalStrength <= -90){
+								signalStrengthIcon = "icons/Signal.png";
+							}
+							if (Math.floor(networks.results[i].frequency/1000) == 2){
+								frequency = "2.4Ghz";
+							}
+							if (Math.floor(networks.results[i].frequency/1000) == 5){
+								frequency = "5Ghz";
+							}
 							if(networks.results[i].ssid == selectedSSID){
-								$('#selectSSID').append($('<option>', {
-									selected: 'selected',
-									value: i,
-									text: networks.results[i].ssid								
-								}).attr({
-									'data-bssid': networks.results[i].bssid,
-									'data-frequency': networks.results[i].frequency,
-									'data-signalLevel': networks.results[i].signalLevel,
-									'data-flags': networks.results[i].flags
-								}));
+								//$('#selectSSID').append($('<option>', {
+								//	selected: 'selected',
+								//	value: i,
+								//	text: networks.results[i].ssid										
+								//}).attr({
+								//	'data-bssid': networks.results[i].bssid,
+								//	'data-frequency': networks.results[i].frequency,
+								//	'data-signalLevel': networks.results[i].signalLevel,
+								//	'data-flags': networks.results[i].flags
+								//}));
+								$(
+									'<div class="network_node" id="network'+i+'" style="width: 100%; display:block;">'+
+										'<span style="display:inline-block; width: 10%; float: left; padding-left: 3px;">'+
+											'<img style="height: 15px;" src='+signalStrengthIcon+'></img>'+
+										'</span>'+
+										'<span style="display:inline-block; width: 20%; float: left;">'+
+											'<img style="height: 15px;" >'+frequency+'</img>'+
+										'</span>'+
+										'<span style="display:inline-block; width: 10%; float: left;">'+
+											'<img style="height: 15px;" '+securityIcon+'></img>'+
+										'</span>'+
+										'<span style="float: left; width: 60%;">'+networks.results[i].ssid+'</span>'+
+									'</div>'
+								).appendTo($('#selectSSID'));
 							} else {
-								$('#selectSSID').append($('<option>', {
-									value: i,
-									text: networks.results[i].ssid								
-								}).attr({
-									'data-bssid': networks.results[i].bssid,
-									'data-frequency': networks.results[i].frequency,
-									'data-signalLevel': networks.results[i].signalLevel,
-									'data-flags': networks.results[i].flags
-								}));
+								//$('#selectSSID').append($('<option>', {
+								//	value: i,
+								//	text: networks.results[i].ssid
+								//}).attr({
+								//	'data-bssid': networks.results[i].bssid,
+								//	'data-frequency': networks.results[i].frequency,
+								//	'data-signalLevel': networks.results[i].signalLevel,
+								//	'data-flags': networks.results[i].flags,
+								//	'data-thumbnail': 'icons/Signal_4.png'
+								//}));
+								$(
+									'<div class="network_node" id="network'+i+'" style="width: 100%; display:block;">'+
+										'<span style="display:inline-block; width: 10%; float: left; padding-left: 3px;">'+
+											'<img style="height: 15px;" src='+signalStrengthIcon+'></img>'+
+										'</span>'+
+										'<span style="display:inline-block; width: 20%; float: left;">'+
+											'<img style="height: 15px;" >'+frequency+'</img>'+
+										'</span>'+
+										'<span style="display:inline-block; width: 10%; float: left;">'+
+											'<img style="height: 15px;" '+securityIcon+'></img>'+
+										'</span>'+
+										'<span style="float: left; width: 60%;">'+networks.results[i].ssid+'</span>'+
+									'</div>'
+								).appendTo($('#selectSSID'));
 							}
 						}
 					}
@@ -1856,7 +1995,7 @@
 				});
 				
 				socket.on('wifiConfigData', function (configData) {
-					console.log(configData);
+					console.log("WIFI Cfg Data: " + JSON.stringify(configData));
 					for(i=0; i<configData.length; i++){
 						if(configData[i].ssid == $('#selectSSID option:selected').text()){
 							$(".wifiPassphrase").val(configData[i].psk);
@@ -1872,6 +2011,35 @@
 						$('.update').modal('show');
 					}
 				});
+				
+				socket.on('SensorError', function (chart) {
+					switch(chart) {
+						case 1: 
+							$('div.Chart0MessageField').html("<b>Sensor Connection Lost</>");
+							break;
+						case 2: 
+							$('div.Chart1MessageField').html("<b>Sensor Connection Lost</>");
+							break;
+						case 3: 
+							$('div.Chart2MessageField').html("<b>Sensor Connection Lost</>");
+							break;
+						default: return; 
+					}
+				});
+				socket.on('SensorConnected', function (chart) {
+					switch(chart) {
+						case 1: 
+							$('div.Chart0MessageField').html("<b>Sensor Connected!</>");
+							break;
+						case 2: 
+							$('div.Chart1MessageField').html("<b>Sensor Connected!</>");
+							break;
+						case 3: 
+							$('div.Chart2MessageField').html("<b>Sensor Connected!</>");
+							break;
+						default: return; 
+					}
+				});
 			}
 			
 		    $(document).on('click', '#connectWithPassphrase', function(e){
@@ -1880,16 +2048,13 @@
 				var bssid = $('#selectSSID option:selected').data('bssid');
 				var dhcp = "false";
 				var pass = document.getElementsByClassName('wifiPassphrase')[0].value;
+				var encrypted = $('#selectSSID option:selected').data('flags');
 				var ip = document.getElementsByClassName('wifiIpAddress')[0].value;
 				var subnet = document.getElementsByClassName('wifiSubNet')[0].value;
 				var gateway = document.getElementsByClassName('wifiGateway')[0].value;
-				var encrypted = "true";
 				if($('#wifiConnType option:selected').val() == 0){
 					dhcp = "true";
 				}
-				//if(id.substring(id.length-5, id.length)=='_none'){
-					encrypted = "false";
-				//}
 
 			    var data = {
 					pass: pass,
@@ -2405,7 +2570,7 @@
 						evaluateControls();
 					}
 		    	});
-		    	
+					
 		    	$(function () {
 		    		$('#beginBrewing').click(function(){
 		    			writeSocket("Start Brewing");
@@ -2732,6 +2897,7 @@
 							</form>
 						</div>
 						<div id="chart0" class="chart0 chart" tableName="control0_temp"></div>
+						<div class="Chart0MessageField glowing"></div>
 						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-80px;">
 							<span class="pull-right clickable clock"  onclick="void(0)" style="max-height:0px">
 								<a href="#" class="tip-left clickable">
@@ -2776,6 +2942,7 @@
 							</form>
 						</div>
 						<div id="chart1" class="chart1 chart" tableName="control1_temp"></div>
+						<div class="Chart1MessageField glowing"></div>
 						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-80px;">
 							<span class="pull-right clickable clock"  onclick="void(0)" style="max-height:0px">
 								<a href="#" class="tip-left clickable">
@@ -2819,6 +2986,7 @@
 							</form>
 						</div>
 						<div id="chart2" class="chart2 chart" tableName="control2_temp"></div>
+						<div class="Chart2MessageField glowing"></div>
 						<div class="spanContainer" style="margin:0px; position:relative; top:-20px; left:-80px;">
 							<span class="pull-right clickable clock"  onclick="void(0)" style="max-height:0px">
 								<a href="#" class="tip-left clickable">
@@ -3390,8 +3558,25 @@
 						<div id="wifiAssign" class="btn btn-xs panel-primary btn-default pull-left btn-block flip-panel controls" style="white-space:normal; display:none">
 							<form class="form-inline" ng-submit="send()" id="wifiConfigForm">
 								<div class="input-group input-group-sm" style="width: 100%">
-									<select size="1" id="selectSSID" class="form-control input-sm pull-left btn-block vert-align" name="WIFI SSID"></select>
-									<span class="input-group-addon" style="width:50%">WIFI SSID</span>
+									<!--select size="1" id="selectSSID1" class="form-control input-sm pull-left btn-block vert-align selectpicker" name="SSID">
+										
+									</select-->
+<div style="background-color: gray; ">
+	<div class="hover_dropdown" style="padding-left: 10px; background-color: gray">Available Networks...
+		<div class="dropdown" style="background-color: gray" id="selectSSID" data-network="Not Connected">
+			<div id="network1" style="width: 100%; display:block;">
+				<span style="display:inline-block; width: 10%; float: left; padding-left: 3px">
+					<img style="height: 15px;" src='icons/Signal_1.png'></img>
+				</span>
+				<span style="display:inline-block; width: 10%; float: left">
+					<img style="height: 15px;" src='icons/Signal_1.png'></img>
+				</span>
+				<span style="float: left; width: 80%;">Network 1</span>
+			</div>
+		</div>
+	</div>
+</div>
+									<span class="input-group-addon" style="width:50%;">WIFI SSID</span>
 								</div> 
 								<div class="flip-container node wifiPassphrasePanel" >
 									<div id="lanStaticConfig" class="btn btn-xs panel-primary btn-default pull-left btn-block controls" style="white-space:normal">

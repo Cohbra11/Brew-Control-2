@@ -57,7 +57,6 @@ var kp = [];
 var ki = [];
 var kd = [];
 var pmax = [];
-var tempSensorPath = "./temp_sensors/devices/"
 var tempReading = [];
 var periodTimer = [];
 var offTimer = [];
@@ -73,18 +72,19 @@ var heaterState = [0, 0, 0];
 var debugLevel = 0;
 var processingSchedule = false;
 var initComplete = false;
+var new_version;
+var disableSensorError = [false,false,false];
 brewScheduleLoaded = false;
 
 function checkVersion(){
-	var tag;
 	var current_version = require('./package.json');
 	latestGithubTag('Cohbra11', 'Brew-Control-2', {
 		timeout: 0,
-	}).then(function (tag) {
-		console.log(tag) // Outputs the latest tag 
+	}).then(function (new_version) {
+		console.log(new_version) // Outputs the latest new_version 
 		var versions = {
 			"cur_version": current_version.version,
-			"new_version": tag
+			"new_version": new_version
 		};
 		globalSocket.emit("versions", versions);	})
 	.catch(function (err) {
@@ -192,33 +192,37 @@ io.on('connection', function(socket) {
 	});
 
 	socket.on('restart', function(data) {
-		console.log('Restarting the Brew Controller Server.');
-		child = exec("shutdown -r", function(error, stdout, stderr) {});
+		restart();
 	});
 
 	socket.on('install_update', function() {
 		console.log('Installing software updates');
-		//child = exec("shutdown -r", function(error, stdout, stderr) {});
+		child = exec("git pull origin master", function(error, stdout, stderr) {
+			var fileName = 'package.json';
+			var packageData = JSON.parse(fs.readFileSync(fileName, 'utf8'));
+			if (packageData != null) {
+				console.log("Writing version "+new_version+" to package.json");
+				packageData.version = new_version;
+				fs.writeFileSync(fileName, JSON.stringify(packageData, null, 2), 'utf8', function(err) {
+					if (err) {
+						return console.log(err);
+					} else {
+						restart();
+					}
+				});
+			}
+		});
 	});
 
 	socket.on('checkWifiConfig', function(data) {
 		console.log('Checking wifi configuration for '+data.ssid+'.');
 		readWpaSupplicantConf();
-		// child = exec("[ -e /var/lib/connman/"+data.ssid+".conf ] && echo 'true' || echo 'false'",
-			// function (error, stdout, stderr) {
-				// if (error !== null) {
-					// console.log('exec error: ' + error);
-				// }
-				// console.log(stdout);
-				// if(stdout.substring(0,4)=='true'){
-					// globalSocket.emit("wifiConfigured", data);
-					// connectToWifi(data);
-				// } else if (stdout.substring(0,5)=='false'){
-					// globalSocket.emit("wifiNotConfigured", data);
-				// }
-			// }
-		// );
 	});
+	
+	function restart(){
+		console.log('Restarting the Brew Controller Server.');
+		child = exec("shutdown -r", function(error, stdout, stderr) {});
+	}
 	
 	function encodePassphrase(passphrase){
 		var hex, i;
@@ -314,6 +318,8 @@ io.on('connection', function(socket) {
 	});
 	
 	socket.on('connectToWifi', function(network) {
+		console.log("Connecting to WIFI");
+		console.log(JSON.stringify(network));
 		connectToWifi(network);
 	});
 
@@ -328,6 +334,7 @@ io.on('connection', function(socket) {
 							status: data,
 							results: scanResults
 						}
+						//console.log(JSON.stringify(connData));
 						globalSocket.emit("networkStatus", connData);
 					//});
 				});
@@ -673,11 +680,28 @@ function update(){
 			default:
 				return;
 		}
+		
 		readSensor(updateControlId, +targetSensor, function(callback) {
 			pidControl(updateControlId, function(callback) {
 				if (tempUnits != undefined) {
 					updateTableInstance.getResults(updateControlId, tempUnits, tempReading[updateControlId], equipSettings[updateControlId].temp);
+		if (activeBrewStateData.brewingActive == true) {			
+			if (step.ack != undefined){
+				if (step.ack != "TRUE"){
+					if (step.wait != "TEMP") {
+						if ((paused == false) || (paused == undefined)) {
+							countDownTimer();
+						}
+					} else if (step.wait == "TEMP") {
+						if (Math.abs(equipSettings[updateControlId].temp - tempReading[updateControlId]) < 1.5) {
+							targetTempReached = true;
+							activeBrewState("targetTempReached", targetTempReached);
+							endStep();
+						}
+					}
 				}
+			}
+		}		}	
 			});
 		});
 	}
@@ -686,29 +710,30 @@ function update(){
 		updateControlId++;
 	} else {
 		updateControlId = 0; // Reset the control id to start over
-		if(processingSchedule){
-			// console.log("processingSchedule");
-		}
 		if (activeBrewStateData.brewingActive == true) {
 			////console.log("step.step "+step.step);
 			////console.log("step.wait "+step.wait);
 			var timeStamp = new Date();
 			//activeBrewState("timeStamp", timeStamp);
-			if (step.ack != undefined){
-				if (step.ack != "TRUE"){
-					if (step.wait != "TEMP") {
-						if ((paused == false) || (paused == undefined)) {
-							countDownTimer();
-						}
-					}
-				} else if (step.wait == "TEMP") {
-					if (Math.abs(equipSettings[targetEquip].temp - curTargetTemp[targetEquip]) < 0.5) {
-						targetTempReached = true;
-						activeBrewState("targetTempReached", targetTempReached);
-						endStep();
-					}
-				}
-			}
+			//if (step.ack != undefined){
+			//	if (step.ack != "TRUE"){
+			//		if (step.wait != "TEMP") {
+			//			if ((paused == false) || (paused == undefined)) {
+			//				countDownTimer();
+			//			}
+			//		}
+			//	} else if (step.wait == "TEMP") {
+			//		//if (Math.abs(equipSettings[targetEquip].temp - curTargetTemp[targetEquip]) < 1.5) {
+			//		if (Math.abs(equipSettings[updateControlId].temp - curTargetTemp[updateControlId]) < 1.5) {
+			//			console.log("equipSettings[updateControlId].temp = "+equipSettings[updateControlId].temp);
+			//			console.log("curTargetTemp[updateControlId] = "+equipSettings[updateControlId].temp);
+			//			console.log("targetSensor = "+targetSensor);
+			//			targetTempReached = true;
+			//			activeBrewState("targetTempReached", targetTempReached);
+			//			endStep();
+			//		}
+			//	}
+			//}
 		} else {
 			previousTime == 0;
 		}
@@ -773,6 +798,7 @@ function readWpaSupplicantConf(callback){
 				)
 			);
 		}
+		console.log("WIFI Cfg Data: " + JSON.stringify(networks));
 		globalSocket.emit("wifiConfigData", networks);
 	});
 };
@@ -853,28 +879,68 @@ function connectToWifi(connectTo){
 									console.log(err);
 								} else {
 									console.log("Writing SSID " + connectTo.ssid + ' to network connection number ' + parseInt(networkID.result) + ': ' + result.result);
-									var psk = "\'\""+connectTo.pass+"\"\'";
-									wpa_cli.set_network('wlan0', networkID.result, "psk", psk, function(err, result){
-										if (err) {
-											console.log(err);
-										} else {
-											console.log("Writing password " + connectTo.pass + ' to network connection number ' + parseInt(networkID.result) + ': ' + result.result);
-											wpa_cli.save_config('wlan0', function(err, result){
-												if (err) {
-													console.log(err);
-												} else {
-													console.log("Saving wpa_supplicant.conf to /etc/wpa_supplicant/: " + result.result);
-													child = exec("wpa_cli reconfigure", function(error, stdout, stderr) {
-														if (error !== null) {
-															console.log('exec error: ' + error);
-														}
-														connectToWifi(connectTo);
-														return;
-													});
+									console.log("Encrypted: " + connectTo.encrypted);
+									if (connectTo.encrypted){
+										var psk = "\'\""+connectTo.pass+"\"\'";
+										//wpa_cli.set_network('wlan0', networkID.result, "psk", psk, function(err, result){
+										child = exec("wpa_cli set_network " + networkID.result + " psk " + psk, function(error, stdout, stderr) {
+											if (error !== null) {
+												console.log('exec error: ' + error);
+											}
+											//if (err) {
+											//	console.log(err);
+											//} else {
+												console.log("Writing password " + connectTo.pass + ' to network connection number ' + parseInt(networkID.result) + ': ' + result.result);
+												wpa_cli.save_config('wlan0', function(err, result){
+													if (err) {
+														console.log(err);
+													} else {
+														console.log("Saving wpa_supplicant.conf to /etc/wpa_supplicant/: " + result.result);
+														child = exec("wpa_cli reconfigure", function(error, stdout, stderr) {
+															if (error !== null) {
+																console.log('exec error: ' + error);
+															}
+															connectToWifi(connectTo);
+															return;
+														});
+													}
+												});
+											//}
+										});
+									} else {
+										console.log("key_mgmt: " + "NONE");
+										//wpa_cli.set_network(networkID.result, "key_mgmt", "NONE", function(err, result){
+										child = exec("wpa_cli set_network " + networkID.result + " key_mgmt NONE", function(error, stdout, stderr) {
+											//console.log("Result: " + result);
+											//if (err) {
+											//	console.log(err);
+											//} else {
+											if (error !== null) {
+												console.log('Exec ' + error);
+											}	
+											console.log("Saving...");
+											child = exec("wpa_cli save_config wlan0", function(error, stdout, stderr) {
+											//wpa_cli.save_config('wlan0', function(err, result){
+												//console.log("Result: " + result);
+												//if (err) {
+												//	console.log(err);
+												//} else {
+												if (error !== null) {
+													console.log('Exec ' + error);
 												}
+												console.log("Saving wpa_supplicant.conf to /etc/wpa_supplicant/: " + result.result);
+												child = exec("wpa_cli reconfigure", function(error, stdout, stderr) {
+													if (error !== null) {
+														console.log('exec error: ' + error);
+													}
+													connectToWifi(connectTo);
+													return;
+												});
+												//}
 											});
-										}
-									});
+										
+										});
+									}
 								}
 							});
 						}
@@ -1395,8 +1461,6 @@ function getSettings(chartID) {
 
 function adjustTempOutput(pidFeedBack, targetChart, callback) {
 	var period = 500;
-	// console.log("pidFeedBack: "+pidFeedBack);
-	// console.log("targetChart: "+targetChart);
 	if (activeBrewStateData != null) {
 		switch (targetChart) { // Get the temperature sensor & heater assignment for the specified targetChart
 			case 0:
@@ -1427,7 +1491,9 @@ function adjustTempOutput(pidFeedBack, targetChart, callback) {
 			return;
 	}
 	// console.log("gpio: "+gpio);
-	// console.log("pidFeedBack[targetChart] > 0: "+pidFeedBack[targetChart] > 0);
+	if(targetChart == 0){
+	}
+	// console.log("pidFeedBack: "+pidFeedBack > 0);
 	if (pidFeedBack > 0) {
 		// console.log("set chart "+targetChart+" heater to: 1");
 		child = exec("echo 1 > /sys/class/gpio/gpio" + gpio + "/value", function(error, stdout, stderr) {
@@ -1443,7 +1509,7 @@ function adjustTempOutput(pidFeedBack, targetChart, callback) {
 			}
 		});
 	}
-	if (pidFeedBack[targetChart] < pmax[targetChart]) {
+	if (pidFeedBack < pmax[targetChart]) {
 		offTimer[targetChart] = setTimeout(function() {
 			// console.log("set chart "+targetChart+" heater to: 0");
 			child = exec("echo 0 > /sys/class/gpio/gpio" + gpio + "/value", function(error, stdout, stderr) {
@@ -1451,7 +1517,7 @@ function adjustTempOutput(pidFeedBack, targetChart, callback) {
 					console.log('exec error: ' + error);
 				}
 			});
-		}, pidFeedBack[targetChart] / pmax[targetChart] * 1000);
+		}, pidFeedBack / pmax[targetChart] * 1000);
 	}
 	return (callback);
 }
@@ -1470,7 +1536,16 @@ function readSensor(updateControlId, targetSensor, callback) {
 			}
 			if (error !== null) {
 				// console.log(targetSensor);
-				console.log('exec error: ' + error);
+				//console.log('Exec ' + error);
+				if (disableSensorError[updateControlId] == false){
+					globalSocket.emit("SensorError", updateControlId);
+					disableSensorError[updateControlId] = true;
+				}				
+			} else {
+				if (disableSensorError[updateControlId] == true){		
+					globalSocket.emit("SensorConnected", updateControlId);
+					disableSensorError[updateControlId] = false;
+				}
 			}
 		} catch (err) {}
 	});
@@ -1490,6 +1565,7 @@ function pidControl(targetChart, callback) {
 	}
 	pidController[targetChart].tune(kp, ki, kd); // Update the PID controller settings
 	pidFeedBack[targetChart] = pidController[targetChart].calculate(parseFloat(tempReading[targetChart])); // Get the updated feedback from the PID controller based on the most current reading and settings
+	//console.log(pidFeedBack[targetChart]);
 	var adjustTempResult = adjustTempOutput(pidFeedBack[targetChart], targetChart); // Turn the heater on/off based on the new feedback
 	callback(curTargetTemp[targetChart]);
 
@@ -1689,7 +1765,7 @@ function writeSchedule(){
 function processMiscItems() {
 	if(unProcessedItems.length >=1){
 		var item = unProcessedItems.shift();
-		// console.log("Processing Unprocessed Misc Item: "+JSON.stringify(item));
+		 console.log("Processing Unprocessed Misc Item: "+JSON.stringify(item));
 		// console.log("Processing Unprocessed Misc Items: "+JSON.stringify(unProcessedItems));
 		insertStep(item);
 	} else {
